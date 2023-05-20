@@ -33,5 +33,4 @@ app.use((err, req, res, next) => {
 
 module.exports = app;
 
-// mongodb+srv://Vitalii:EVA05LygttAtQuLa@cluster0.suvr4pr.mongodb.net/test
-// EVA05LygttAtQuLa
+
