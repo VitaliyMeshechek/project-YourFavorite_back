@@ -1,13 +1,10 @@
-const Jimp = require("jimp");
 const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
-const { nanoid } = require("nanoid");
 
 const { HttpError, ctrlWrapper } = require("../../helpers");
 const path = require("path");
-const fs = require("fs/promises");
-const nodemailer = require("nodemailer");
+
 const { User } = require("../../models/user");
 
 require("dotenv").config();

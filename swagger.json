@@ -1,0 +1,379 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "project-YourFavorite",
+      "description": "Dev server",
+      "version": "0.0.1"
+    },
+    "consumes": [
+      "application/json",
+      "multipart/form-data"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "servers": [
+      {
+        "url": "http://localhost:3001/api"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Auth",
+        "description": "Authorization endpoints"
+      }
+    ],
+    "paths": {
+      "/register": {
+        "post": {
+          "tags": [
+            "Auth"
+          ],
+          "summary": "User registration",
+          "description": "User registration",
+          "parameters": [],
+          "requestBody": {
+            "description": "User registration",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "The user is successfully registered",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RegistrationResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "missing required field email",
+              "content": {}
+            },
+            "409": {
+              "description": "his email is already in use",
+              "content": {}
+            }
+          }
+        }
+      },
+      "/login": {
+        "post": {
+          "tags": [
+            "Auth"
+          ],
+          "summary": "User login",
+          "description": "User login",
+          "parameters": [],
+          "requestBody": {
+            "description": "User login",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Login successfully confirmed",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/LoginResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request (invalid request body)",
+              "content": {}
+            },
+            "401": {
+              "description": "Email or password is wrong",
+              "content": {}
+            }
+          }
+        }
+      },
+      "/current": {
+        "get": {
+          "tags": [
+            "Auth"
+          ],
+          "summary": "Сurrent user",
+          "description": "Сurrent user",
+          "parameters": [],
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CurrentUserResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "The user is not authorized",
+              "content": {}
+            },
+            "403": {
+              "description": "Has no permission",
+              "content": {}
+            }
+          }
+        }
+      },
+      "/logout": {
+        "get": {
+          "tags": [
+            "Auth"
+          ],
+          "summary": "Logout user",
+          "description": "Logout user",
+          "parameters": [],
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/LogoutResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "The user is not authorized",
+              "content": {}
+            },
+            "403": {
+              "description": "Token invalid",
+              "content": {}
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "RegistrationRequest": {
+          "type": "object",
+          "required": [
+            "email",
+            "password",
+            "name",
+            "phone",
+            "city"
+          ],
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email",
+              "example": "example@gmail.com"
+            },
+            "password": {
+              "type": "string",
+              "description": "User's password",
+              "example": "password777"
+            },
+            "name": {
+              "type": "string",
+              "description": "User's name",
+              "example": "Vitalii"
+            },
+            "phone": {
+              "type": "string",
+              "description": "User's phone",
+              "format": "phone",
+              "example": 380962833454
+            },
+            "city": {
+              "type": "string",
+              "description": "User's city",
+              "example": "Kiev,Ukraine"
+            }
+          }
+        },
+        "RegistrationResponse": {
+          "type": "object",
+          "properties": {
+            "user": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "User's email",
+                  "format": "email",
+                  "example": "example@gmail.com"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "User's name",
+                  "example": "Vitalii"
+                },
+                "city": {
+                  "type": "string",
+                  "description": "User's city",
+                  "example": "Kiev,Ukraine"
+                },
+                "phone": {
+                  "type": "string",
+                  "description": "User's phone",
+                  "format": "phone",
+                  "example": 380962833454
+                }
+              }
+            }
+          },
+          "example": {
+            "user": {
+              "email": "donald@gmail.com",
+              "name": "Donald",
+              "city": "Washington,USA",
+              "phone": "+380111111111"
+            }
+          }
+        },
+        "LoginRequest": {
+          "type": "object",
+          "required": [
+            "email",
+            "password"
+          ],
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email",
+              "example": "example@gmail.com"
+            },
+            "password": {
+              "type": "string",
+              "description": "User's password",
+              "example": "password777"
+            }
+          }
+        },
+        "LoginResponse": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "description": "User's token",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NjdjMGEwM2Y5MmNkYzRhMzVkZmM5MSIsImlhdCI6MTY4NDUyMTQ5OSwiZXhwIjoxNjg0NTY0Njk5fQ.XDEnSfg9vIzthJiC_arSOgYIQL3gCGUkKHbvHdi_aEM"
+            },
+            "user": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "User's email",
+                  "format": "email",
+                  "example": "example@gmail.com"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "User's name",
+                  "example": "Vitalii"
+                }
+              }
+            }
+          }
+        },
+        "CurrentUserResponse": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email",
+              "example": "example@gmail.com"
+            },
+            "name": {
+              "type": "string",
+              "description": "User's name",
+              "example": "Vitalii"
+            },
+            "phone": {
+              "type": "string",
+              "description": "User's phone",
+              "format": "phone",
+              "example": "+380962833454"
+            },
+            "city": {
+              "type": "string",
+              "description": "User's city",
+              "example": "Kiev,Ukraine"
+            },
+            "birthday": {
+              "type": "string",
+              "description": "User's date of birthday in format :dd.mm.yyyy",
+              "example": "21.05.2023"
+            },
+            "avatarURL": {
+              "type": "string",
+              "description": "User's image",
+              "example": "https://e7.pngegg.com/pngimages/499/839/png-clipart-cat-silhouette-sticker-dog-beige-color-mammal-leaf.png"
+            },
+            "_id": {
+              "type": "string",
+              "example": "6467d2dd93cf281e5ddd6c72"
+            }
+          },
+          "example": {
+            "email": "vitalii@gmail.com",
+            "name": "Vitalii",
+            "phone": "+380962833454",
+            "city": "Kiev,Ukraine",
+            "birthday": "21.05.2023",
+            "avatarURL": "https://e7.pngegg.com/pngimages/499/839/png-clipart-cat-silhouette-sticker-dog-beige-color-mammal-leaf.png",
+            "_id": "6467d2dd93cf281e5ddd6c72"
+          }
+        },
+        "LogoutResponse": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "a message about the successful logout of the user",
+              "example": "Logout success"
+            }
+          },
+          "example": {
+            "message": "Logout success"
+          }
+        }
+      },
+      "securitySchemes": {
+        "Bearer": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  }

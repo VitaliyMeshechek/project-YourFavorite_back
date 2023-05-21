@@ -69,10 +69,10 @@ const registerSchema = Joi.object({
       minDomainSegments: 2,
       tlds: { allow: ["com", "net", "ukr", "ua"] },
     }),
-  password: Joi.string().pattern(passwordFormat).min(6).max(16),
+  password: Joi.string().pattern(passwordFormat).min(6).max(16).required(),
   mobilePhone: Joi.string().pattern(phoneFormat).required(),
-  city: Joi.string().pattern(cityFormat),
-  birthday: Joi.string().pattern(dateFormat),
+  city: Joi.string().pattern(cityFormat).required(),
+  birthday: Joi.string().pattern(dateFormat).required(),
 });
 
 const emailSchema = Joi.object({
