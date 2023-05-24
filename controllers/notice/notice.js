@@ -93,31 +93,40 @@ const getNoticeById = async (req, res) => {
   res.status(200).json(notice);
 };
 
-const getNoticeByTitle = async (req, res) => {
-  const { category, title } = req.params;
-
-  const notices = await Notice.find({
-    category,
-    title: { $regex: new RegExp(title, "i") },
-  });
-
-  res.status(200).json({ notices });
-};
-
 const getNoticeByCategory = async (req, res) => {
   const { category } = req.params;
+  const { title } = req.query;
 
-  const notices = await Notice.find({ category });
-
-  res.status(200).json({ notices });
+  if (title && category) {
+    const notices = await Notice.find({ title, category });
+    res.status(200).json(notices);
+  } else if (title) {
+    const notices = await Notice.find({ title });
+    res.status(200).json(notices);
+  } else if (category) {
+    const notices = await Notice.find({ category });
+    res.status(200).json(notices);
+  } else {
+    res.status(400).json({ error: "No search parameters provided" });
+  }
 };
 
 const getUserByFavorite = async (req, res) => {
   const { _id: userId } = req.user;
+  const { title } = req.query;
 
-  const notices = await Notice.find({
-    favorite: { $in: userId },
-  });
+  let notices;
+
+  if (title) {
+    notices = await Notice.find({
+      favorite: { $in: userId },
+      title: title,
+    });
+  } else {
+    notices = await Notice.find({
+      favorite: { $in: userId },
+    });
+  }
 
   res.status(200).json({ notices });
 };
@@ -126,18 +135,6 @@ const getUserByNotices = async (req, res) => {
   const { _id: userId } = req.user;
 
   const notices = await Notice.find({ owner: userId });
-
-  res.status(200).json({ notices });
-};
-
-const findFavoriteByTitle = async (req, res) => {
-  const { title } = req.params;
-  const { _id: userId } = req.user;
-
-  const notices = await Notice.find({
-    favorite: { $in: userId },
-    title: { $regex: new RegExp(title, "i") },
-  });
 
   res.status(200).json({ notices });
 };
@@ -160,9 +157,7 @@ module.exports = {
   getNoticeByCategory,
   createNotice,
   addNoticeFavorite,
-  getNoticeByTitle,
   getUserByFavorite,
-  findFavoriteByTitle,
   findUserByTitle,
   deleteNoticeFavorite,
   deleteUserNotice,
