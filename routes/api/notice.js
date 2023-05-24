@@ -15,25 +15,17 @@ const {
   getNoticeByCategory,
   createNotice,
   addNoticeFavorite,
-  getNoticeByTitle,
   getUserByFavorite,
-  findFavoriteByTitle,
   findUserByTitle,
   deleteNoticeFavorite,
   deleteUserNotice,
-} = require("../../controllers/auth/notice");
+} = require("../../controllers/notice/notice");
 
 router.get("/", authenticate, ctrlWrapper(getUserByNotices));
 router.get("/:id", isValidId, ctrlWrapper(getNoticeById));
-router.get("/category/:category", ctrlWrapper(getNoticeByCategory));
+router.get("/category/:categoryName", ctrlWrapper(getNoticeByCategory));
 router.get("/title/:title", authenticate, ctrlWrapper(findUserByTitle));
-router.get("/title/:category/:title", ctrlWrapper(getNoticeByTitle));
-router.get("/user/favorites", authenticate, ctrlWrapper(getUserByFavorite));
-router.get(
-  "/user/favorites/title/:title",
-  authenticate,
-  ctrlWrapper(findFavoriteByTitle)
-);
+router.get("/user/favorite", authenticate, ctrlWrapper(getUserByFavorite));
 
 router.post(
   "/",
@@ -43,14 +35,14 @@ router.post(
   ctrlWrapper(createNotice)
 );
 router.post(
-  "/favorites/:id",
+  "/favorite/:id",
   isValidId,
   authenticate,
   ctrlWrapper(addNoticeFavorite)
 );
 
 router.delete(
-  "/favorites/:id",
+  "/favorite/:id",
   isValidId,
   authenticate,
   ctrlWrapper(deleteNoticeFavorite)
