@@ -44,7 +44,7 @@ const petSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-petSchema.post("save", handleMongooseError);
+// petSchema.post("save", handleMongooseError);
 
 const petAddSchema = Joi.object({
   name: Joi.string().pattern(nameFormat).required(),

@@ -51,6 +51,10 @@ const userSchema = new Schema(
       match: phoneFormat,
       required: true,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
   },
   { versionKey: false, timestamps: true }
 );
