@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const { HttpError, ctrlWrapper } = require("../../helpers");
 const path = require("path");
 
-const { User } = require("../../models/user");
+const { User } = require("../../models/userSchema");
 
 require("dotenv").config();
 const { SECRET_KEY, BASE_URL } = process.env;
@@ -59,15 +59,16 @@ const login = async (req, res) => {
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "12h" });
   await User.findByIdAndUpdate(user._id, { token });
 
-  res.json({
+  res.status(200).json({
     token,
+    message: "Your request has been successfully completed",
   });
 };
 
 const getCurrent = async (req, res) => {
   const { name, email, phone, city, birthday, avatarURL, _id } = req.user;
 
-  res.status(201, "Your request has been successfully completed").json({
+  res.status(201).json({
     avatarURL,
     name,
     email,
@@ -75,6 +76,7 @@ const getCurrent = async (req, res) => {
     phone,
     city,
     _id,
+    message: "Your request has been successfully completed",
   });
 };
 
@@ -107,5 +109,4 @@ module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   updateFieldUser: ctrlWrapper(updateFieldUser),
   logout: ctrlWrapper(logout),
-
 };

@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const ctrl = require("../../controllers/pets");
+const  ctrl  = require("../../controllers/cardPets/addPet");
 
-const { ctrlWrapper } = require("../../helpers");
+// const { ctrlWrapper } = require("../../helpers");
 
-const { petSchemas } = require("../../models/pet");
+const { petSchemas } = require("../../models/petSchema");
 
 const { validateBody, authenticate, upload } = require("../../middlewares");
 
@@ -15,10 +15,10 @@ const { validateBody, authenticate, upload } = require("../../middlewares");
 // const { userSchemas } = require("../../models/user");
 
 router.post(
-  "/pets",
+  "/pet",
   authenticate,
   validateBody(petSchemas.petAddSchema),
-  ctrlWrapper(ctrl.addPet)
+  ctrl.addPet
 );
 
 // // router.post(

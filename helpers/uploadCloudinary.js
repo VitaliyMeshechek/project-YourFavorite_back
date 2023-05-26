@@ -9,7 +9,7 @@ cloudinary.config({
   secure: true,
 });
 
-const updateAvatar = async (avatar) => {
+const uploadCloudinary = async (avatar) => {
   try {
     const resultUpload = await Jimp.read(avatar);
     resultUpload.cover(450, 450);

@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 const Joi = require("joi");
 
-const { handleMongooseError } = require("..//helpers");
+const { handleMongooseError } = require("../helpers");
 
 // eslint-disable-next-line no-useless-escape
 const emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -18,42 +18,46 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: [true, "Email is required"],
-      match: emailFormat,
-      unique: true,
+      // match: emailFormat,
+      // unique: true,
     },
-    name: {
-      type: String,
-      match: nameFormat,
-      required: true,
-    },
+    // name: {
+    //   type: String,
+    //   match: nameFormat,
+    //   required: true,
+    // },
     password: {
       type: String,
       match: passwordFormat,
       required: [true, "Set password for user"],
     },
-    birthday: {
-      type: String,
-      match: dateFormat,
-      required: true,
-    },
-    city: {
-      type: String,
-      match: cityFormat,
-      default: "",
-    },
+    // birthday: {
+    //   type: String,
+    //   match: dateFormat,
+    //   required: true,
+    // },
+    // city: {
+    //   type: String,
+    //   match: cityFormat,
+    //   default: "",
+    // },
     token: String,
-    avatarUrl: {
-      type: String,
-      required: true,
-    },
-    mobilePhone: {
-      type: String,
-      match: phoneFormat,
-      required: true,
-    },
+    // avatarUrl: {
+    //   type: String,
+    //   required: true,
+    // },
+    // mobilePhone: {
+    //   type: String,
+    //   match: phoneFormat,
+    //   required: true,
+    // },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
+    },
+    firstLogin: {
+      type: Boolean,
+      default: true,
     },
   },
   { versionKey: false, timestamps: true }
@@ -62,7 +66,7 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
-  name: Joi.string().min(1).max(20).pattern(nameFormat).required(),
+  // name: Joi.string().min(1).max(20).pattern(nameFormat).required(),
   email: Joi.string()
     .required()
     .pattern(
@@ -74,9 +78,9 @@ const registerSchema = Joi.object({
       tlds: { allow: ["com", "net", "ukr", "ua"] },
     }),
   password: Joi.string().pattern(passwordFormat).min(6).max(16).required(),
-  mobilePhone: Joi.string().pattern(phoneFormat).required(),
-  city: Joi.string().pattern(cityFormat).required(),
-  birthday: Joi.string().pattern(dateFormat).required(),
+  // mobilePhone: Joi.string().pattern(phoneFormat).required(),
+  // city: Joi.string().pattern(cityFormat).required(),
+  // birthday: Joi.string().pattern(dateFormat).required(),
 });
 
 const emailSchema = Joi.object({
@@ -93,11 +97,10 @@ const emailSchema = Joi.object({
 });
 
 const loginSchema = Joi.object({
-  email: Joi.string()
-    .pattern(
-      emailFormat,
-      "match the input format. Example of input: ivanov@gmail.com"
-    ),
+  email: Joi.string().pattern(
+    emailFormat,
+    "match the input format. Example of input: ivanov@gmail.com"
+  ),
   password: Joi.string().min(6).max(16).pattern(passwordFormat).required(),
 });
 
