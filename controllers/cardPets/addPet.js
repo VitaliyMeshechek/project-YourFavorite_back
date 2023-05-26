@@ -29,6 +29,4 @@ const addPet = async (req, res) => {
   }
 };
 
-module.exports = {
-  addPet: ctrlWrapper(addPet),
-};
+module.exports = addPet;

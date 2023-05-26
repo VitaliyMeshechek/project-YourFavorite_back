@@ -25,10 +25,10 @@ const petSchema = new Schema(
       match: nameFormat,
       required: true,
     },
-    avatarURL: {
+    avatarUrl: {
       type: String,
       default: "",
-      required: true,
+      // required: true,
     },
     comments: {
       type: String,

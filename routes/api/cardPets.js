@@ -1,13 +1,18 @@
 const express = require("express");
 const router = express.Router();
 
-const  ctrl  = require("../../controllers/cardPets/addPet");
+const ctrl = require("../../controllers/cardPets");
 
-// const { ctrlWrapper } = require("../../helpers");
+const { ctrlWrapper } = require("../../helpers");
 
 const { petSchemas } = require("../../models/petSchema");
 
-const { validateBody, authenticate, upload } = require("../../middlewares");
+const {
+  validateBody,
+  authenticate,
+  isValidId,
+  upload,
+} = require("../../middlewares");
 
 // const { addPet } = require("../../controllers/cardPets/cardPets");
 
@@ -18,16 +23,17 @@ router.post(
   "/pet",
   authenticate,
   validateBody(petSchemas.petAddSchema),
-  ctrl.addPet
+  upload.single("avatar"),
+  ctrlWrapper(ctrl.addPet)
 );
 
-// // router.post(
-// //   "/pets",
-// //   authenticate,
-// //   upload.single("avatar"),
-// //   validateBody(petSchemas),
-// //   ctrlWrapper(addPet)
-// // );
+// router.post(
+//   "/pets",
+//   authenticate,
+//   upload.single("avatar"),
+//   validateBody(petSchemas),
+//   ctrlWrapper(addPet)
+// );
 
 // router.post(
 //   "/",
@@ -36,20 +42,16 @@ router.post(
 //   ctrlWrapper(addPet)
 // );
 
-// // router.delete(
-// //   "/pets/:id",
-// //   authenticate,
-// //   isValidId,
-// //   ctrlWrapper(ctrl.removePet)
-// // );
-// // router.get("/", authenticate, ctrlWrapper(ctrl.getUserInfo));
+router.delete("/pet/:id", authenticate, isValidId, ctrlWrapper(ctrl.deletePet));
 
-// // router.patch(
-// //   "/",
-// //   authenticate,
-// //   upload.single("avatar"),
-// //   validateBody(userSchemas.updateUserSchema),
-// //   ctrlWrapper(ctrl.updateUser)
-// // );
+// router.get("/", authenticate, ctrlWrapper(ctrl.getUserInfo));
+
+// router.patch(
+//   "/",
+//   authenticate,
+//   upload.single("avatar"),
+//   validateBody(userSchemas.updateUserSchema),
+//   ctrlWrapper(ctrl.updateUser)
+// );
 
 module.exports = router;
