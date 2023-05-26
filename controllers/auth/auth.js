@@ -56,6 +56,7 @@ const login = async (req, res) => {
   const payload = {
     id: user._id,
   };
+  require("dotenv").config();
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "12h" });
   await User.findByIdAndUpdate(user._id, { token });
 
