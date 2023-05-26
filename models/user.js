@@ -53,7 +53,7 @@ const userSchema = new Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'user',
+      ref: "user",
     },
   },
   { versionKey: false, timestamps: true }
@@ -94,7 +94,6 @@ const emailSchema = Joi.object({
 
 const loginSchema = Joi.object({
   email: Joi.string()
-    .required()
     .pattern(
       emailFormat,
       "match the input format. Example of input: ivanov@gmail.com"

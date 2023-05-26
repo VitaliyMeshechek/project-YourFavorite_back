@@ -28,13 +28,11 @@ const petSchema = new Schema(
     avatarURL: {
       type: String,
       default: "",
-      required: true,
     },
     comments: {
       type: String,
       match: textFormat,
       default: "",
-      required: true,
     },
     owner: {
       type: Schema.Types.ObjectId,
@@ -44,13 +42,13 @@ const petSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-// petSchema.post("save", handleMongooseError);
+petSchema.post("save", handleMongooseError);
 
 const petAddSchema = Joi.object({
   name: Joi.string().pattern(nameFormat).required(),
   birthday: Joi.string().pattern(dateFormat).required(),
   breed: Joi.string().pattern(nameFormat).required(),
-  comments: Joi.string().min(10).max(120).pattern(textFormat).required(),
+  comments: Joi.string().min(10).max(120).pattern(textFormat),
   avatarURL: Joi.string().optional(),
 });
 

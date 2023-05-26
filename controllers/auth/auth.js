@@ -86,9 +86,7 @@ const updateFieldUser = async (req, res) => {
   if (!name && !email && !phone && !city && !birthday) {
     throw HttpError(400, "missing fields");
   }
-  const result = await User.findOneAndUpdate(
-    { ...req.body, owner: userId }
-  );
+  const result = await User.findOneAndUpdate({ ...req.body, owner: userId });
 
   if (!result) {
     throw HttpError(404, "Not found");
@@ -109,4 +107,5 @@ module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   updateFieldUser: ctrlWrapper(updateFieldUser),
   logout: ctrlWrapper(logout),
+
 };
