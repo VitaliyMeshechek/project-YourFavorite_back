@@ -9,13 +9,13 @@ cloudinary.config({
   secure: true,
 });
 
-const uploadCloudinary = async (avatar) => {
+const uploadCloudinary = async (path) => {
   try {
-    const resultUpload = await Jimp.read(avatar);
+    const resultUpload = await Jimp.read(path);
     resultUpload.cover(450, 450);
-    await resultUpload.writeAsync(avatar);
-    const result = await cloudinary.uploader.upload(avatar);
-    fs.unlinkSync(avatar);
+    await resultUpload.writeAsync(path);
+    const result = await cloudinary.uploader.upload(path);
+    fs.unlinkSync(path);
     return result;
   } catch (error) {
     throw new Error(error.message);

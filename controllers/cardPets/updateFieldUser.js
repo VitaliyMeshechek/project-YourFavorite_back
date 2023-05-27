@@ -29,7 +29,7 @@ const updateFieldUser = async (req, res) => {
       },
     });
   } else {
-    const avatarUrl = await uploadCloudinary(req.file.avatar);
+    const avatarUrl = await uploadCloudinary(req.file.path);
     const user = await User.findOneAndUpdate(
       _id,
       { ...req.body, avatarUrl: avatarUrl.secure_url },
