@@ -6,6 +6,7 @@ const ctrl = require("../../controllers/cardPets");
 const { ctrlWrapper } = require("../../helpers");
 
 const { petSchemas } = require("../../models/petSchema");
+const { schemas } = require("../../models/userSchema");
 
 const {
   validateBody,
@@ -13,11 +14,6 @@ const {
   isValidId,
   upload,
 } = require("../../middlewares");
-
-// const { addPet } = require("../../controllers/cardPets/cardPets");
-
-// const { petSchemas } = require("../../models/pet");
-// const { userSchemas } = require("../../models/user");
 
 router.post(
   "/pet",
@@ -27,31 +23,16 @@ router.post(
   ctrlWrapper(ctrl.addPet)
 );
 
-// router.post(
-//   "/pets",
-//   authenticate,
-//   upload.single("avatar"),
-//   validateBody(petSchemas),
-//   ctrlWrapper(addPet)
-// );
-
-// router.post(
-//   "/",
-//   authenticate,
-//   validateBody(petSchemas.petAddSchema),
-//   ctrlWrapper(addPet)
-// );
-
 router.delete("/pet/:id", authenticate, isValidId, ctrlWrapper(ctrl.deletePet));
 
-// router.get("/", authenticate, ctrlWrapper(ctrl.getUserInfo));
+router.get("/", authenticate, ctrlWrapper(ctrl.getCurrent));
 
-// router.patch(
-//   "/",
-//   authenticate,
-//   upload.single("avatar"),
-//   validateBody(userSchemas.updateUserSchema),
-//   ctrlWrapper(ctrl.updateUser)
-// );
+router.put(
+  "/",
+  authenticate,
+  upload.single("avatar"),
+  validateBody(schemas.updateUserSchema),
+  ctrlWrapper(ctrl.updateFieldUser)
+);
 
 module.exports = router;

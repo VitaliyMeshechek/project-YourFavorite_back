@@ -18,39 +18,38 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: [true, "Email is required"],
-      // match: emailFormat,
-      // unique: true,
+      match: emailFormat,
+      unique: true,
     },
-    // name: {
-    //   type: String,
-    //   match: nameFormat,
-    //   required: true,
-    // },
     password: {
       type: String,
       match: passwordFormat,
       required: [true, "Set password for user"],
     },
-    // birthday: {
-    //   type: String,
-    //   match: dateFormat,
-    //   required: true,
-    // },
-    // city: {
-    //   type: String,
-    //   match: cityFormat,
-    //   default: "",
-    // },
+    name: {
+      type: String,
+      match: nameFormat,
+      default: "Anna",
+    },
+    birthday: {
+      type: String,
+      match: dateFormat,
+      default: "00.00.0000",
+    },
+    city: {
+      type: String,
+      match: cityFormat,
+      default: "Kyiv",
+    },
     token: String,
-    // avatarUrl: {
-    //   type: String,
-    //   required: true,
-    // },
-    // mobilePhone: {
-    //   type: String,
-    //   match: phoneFormat,
-    //   required: true,
-    // },
+    avatarUrl: {
+      type: String,
+    },
+    mobilePhone: {
+      type: String,
+      match: phoneFormat,
+      default: "+380000000000",
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
@@ -59,6 +58,10 @@ const userSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -66,7 +69,6 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
-  // name: Joi.string().min(1).max(20).pattern(nameFormat).required(),
   email: Joi.string()
     .required()
     .pattern(
@@ -78,9 +80,10 @@ const registerSchema = Joi.object({
       tlds: { allow: ["com", "net", "ukr", "ua"] },
     }),
   password: Joi.string().pattern(passwordFormat).min(6).max(16).required(),
-  // mobilePhone: Joi.string().pattern(phoneFormat).required(),
-  // city: Joi.string().pattern(cityFormat).required(),
-  // birthday: Joi.string().pattern(dateFormat).required(),
+  name: Joi.string().min(1).max(20).pattern(nameFormat),
+  mobilePhone: Joi.string().pattern(phoneFormat),
+  city: Joi.string().pattern(cityFormat),
+  birthday: Joi.string().pattern(dateFormat),
 });
 
 const emailSchema = Joi.object({

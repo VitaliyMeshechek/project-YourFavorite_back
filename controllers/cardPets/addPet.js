@@ -2,7 +2,7 @@ const { uploadCloudinary } = require("../../helpers/uploadCloudinary");
 const { Pet } = require("../../models/petSchema");
 // const gravatar = require("gravatar");
 
-const { HttpError, ctrlWrapper } = require("../../helpers");
+const { HttpError } = require("../../helpers");
 
 const addPet = async (req, res) => {
   const { name } = req.body;
