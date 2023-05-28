@@ -27,7 +27,7 @@ router.delete("/pet/:id", authenticate, isValidId, ctrlWrapper(ctrl.deletePet));
 
 router.get("/", authenticate, ctrlWrapper(ctrl.getCurrent));
 
-router.put(
+router.patch(
   "/",
   authenticate,
   upload.single("avatar"),
