@@ -53,7 +53,7 @@ const userSchema = new Schema(
     firstLogin: {
       type: Boolean,
       default: true,
-    },
+    },   
     verify: {
       type: Boolean,
       default: false,

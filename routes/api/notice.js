@@ -22,10 +22,10 @@ const {
 } = require("../../controllers/notice/notice");
 
 router.get("/", authenticate, ctrlWrapper(getUserByNotices));
-router.get("/:id", isValidId, ctrlWrapper(getNoticeById));
-router.get("/category/:categoryName", ctrlWrapper(getNoticeByCategory));
-router.get("/title/:title", authenticate, ctrlWrapper(findUserByTitle));
-router.get("/user/favorite", authenticate, ctrlWrapper(getUserByFavorite));
+// router.get("/:id", isValidId, ctrlWrapper(getNoticeById));
+router.get("/:categoryName", ctrlWrapper(getNoticeByCategory));
+// router.get("/title/:title", authenticate, ctrlWrapper(findUserByTitle));
+router.get("/favorite", authenticate, ctrlWrapper(getUserByFavorite));
 
 router.post(
   "/",

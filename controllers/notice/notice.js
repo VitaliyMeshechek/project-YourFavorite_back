@@ -1,4 +1,5 @@
 const { Notice } = require("../../models/notice");
+const { User } = require("../../models/userSchema");
 const { HttpError } = require("../../helpers/HttpError");
 const gravatar = require("gravatar");
 
@@ -27,26 +28,25 @@ const createNotice = async (req, res, next) => {
 };
 
 const addNoticeFavorite = async (req, res, next) => {
-  const { _id: userId } = req.user;
+  const { _id, favorite } = req.user;
 
   const { id } = req.params;
 
-  const { favorite } = await Notice.findOne({ _id: id });
+  const result = favorite.includes(id);
 
-  if (favorite.includes(userId)) {
+  if (favorite.includes(result)) {
     throw HttpError(500, "Notice already added to favorites");
   }
 
-  const notice = await Notice.findOneAndUpdate(
-    { _id: id },
-    { $addToSet: { favorite: userId } }
+  const notice = await User.findByIdAndUpdate(
+    _id,
+    { $push: { favorite: id } },
+    {
+      new: true,
+    }
   );
 
-  res.status(200).json({
-    userId: userId,
-    noticeId: notice._id,
-    message: "Successfully",
-  });
+  res.status(201).json({ favorite: notice.favorite });
 };
 
 const deleteNoticeFavorite = async (req, res, next) => {
@@ -94,14 +94,14 @@ const getNoticeById = async (req, res) => {
 };
 
 const getNoticeByCategory = async (req, res) => {
-  const { category } = req.params;
-  const { title } = req.query;
+  const { categoryName: category } = req.params;
+  const { query } = req.query;
 
-  if (title && category) {
-    const notices = await Notice.find({ title, category });
+  if (query && category) {
+    const notices = await Notice.find({ query, category });
     res.status(200).json(notices);
-  } else if (title) {
-    const notices = await Notice.find({ title });
+  } else if (query) {
+    const notices = await Notice.find({ query });
     res.status(200).json(notices);
   } else if (category) {
     const notices = await Notice.find({ category });
@@ -118,12 +118,12 @@ const getUserByFavorite = async (req, res) => {
   let notices;
 
   if (title) {
-    notices = await Notice.find({
+    notices = await User.find({
       favorite: { $in: userId },
       title: title,
     });
   } else {
-    notices = await Notice.find({
+    notices = await User.find({
       favorite: { $in: userId },
     });
   }
