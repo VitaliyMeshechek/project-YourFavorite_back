@@ -28,24 +28,26 @@ const createNotice = async (req, res, next) => {
 };
 
 const addNoticeFavorite = async (req, res, next) => {
-  const { _id, favorite } = req.user;
+  const { _id: userId } = req.user;
+
   const { id } = req.params;
 
-  if (favorite.includes(id)) {
-    throw HttpError(
-      409,
-      `Notice with id: ${id} is already in your favorite list`
-    );
+  const { favorite } = await Notice.findOne({ _id: id });
+
+  if (favorite.includes(userId)) {
+    throw HttpError(500, "Notice already added to favorites");
   }
 
-  const user = await User.findByIdAndUpdate(
-    _id,
-    { $push: { favorite: id } },
-    {
-      new: true,
-    }
+  const notice = await Notice.findOneAndUpdate(
+    { _id: id },
+    { $addToSet: { favorite: userId } }
   );
-  res.status(201).json({ favorite: user.favorite });
+
+  res.status(200).json({
+    userId: userId,
+    noticeId: notice._id,
+    message: "Successfully",
+  });
 };
 
 const deleteNoticeFavorite = async (req, res, next) => {
