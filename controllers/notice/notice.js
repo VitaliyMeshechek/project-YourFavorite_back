@@ -30,6 +30,7 @@ const createNotice = async (req, res, next) => {
 const addNoticeFavorite = async (req, res, next) => {
   const { _id, favorite } = req.user;
   const { id } = req.params;
+  const { body } = req;
 
   if (favorite.includes(id)) {
     throw HttpError(
@@ -38,14 +39,16 @@ const addNoticeFavorite = async (req, res, next) => {
     );
   }
 
-  const user = await User.findByIdAndUpdate(
+  const updatedUser = await User.findByIdAndUpdate(
     _id,
-    { $push: { favorite: id } },
-    {
-      new: true,
-    }
+    { $push: { favorite: id }, body },
+    { new: true }
   );
-  res.status(201).json({ favorite: user.favorite });
+
+  res.status(201).json({
+    favorite: updatedUser.favorite,
+    body,
+  });
 };
 
 const deleteNoticeFavorite = async (req, res, next) => {
@@ -82,22 +85,57 @@ const deleteUserNotice = async (req, res, next) => {
 
 const getNoticeByCategory = async (req, res) => {
   const { categoryName: category, id } = req.params;
-  const { query } = req.query;
-
+  const { query, page, limit } = req.query;
+  const skip = (page - 1) * limit;
   if (!query && !category) {
-    const allNotices = await Notice.find({});
+    const allNotices = await Notice.find(
+      {},
+      "-createdAt -updatedAt -idCloudAvatar",
+      {
+        skip,
+        limit,
+      }
+    );
     res.status(200).json(allNotices);
   } else if (category && !query && !id) {
-    const noticesByCategory = await Notice.find({ category });
+    const noticesByCategory = await Notice.find(
+      { category },
+      "-createdAt -updatedAt -idCloudAvatar",
+      {
+        skip,
+        limit,
+      }
+    );
     res.status(200).json(noticesByCategory);
   } else if (category && query && !id) {
-    const notices = await Notice.find({ query, category });
+    const notices = await Notice.find(
+      { query, category },
+      "-createdAt -updatedAt -idCloudAvatar",
+      {
+        skip,
+        limit,
+      }
+    );
     res.status(200).json(notices);
   } else if (category && query && id) {
-    const notices = await Notice.find({ query, category, _id: id });
+    const notices = await Notice.find(
+      { query, category, _id: id },
+      "-createdAt -updatedAt -idCloudAvatar",
+      {
+        skip,
+        limit,
+      }
+    );
     res.status(200).json(notices);
   } else if (id) {
-    const notice = await Notice.findById(id);
+    const notice = await Notice.findById(
+      id,
+      "-createdAt -updatedAt -idCloudAvatar",
+      {
+        skip,
+        limit,
+      }
+    );
     if (notice) {
       res.status(200).json([notice]);
     } else {
@@ -115,12 +153,12 @@ const getUserByFavorite = async (req, res) => {
   let notices;
 
   if (title) {
-    notices = await Notice.find({
+    notices = await User.find({
       favorite: { $in: userId },
       title: title,
     });
   } else {
-    notices = await Notice.find({
+    notices = await User.find({
       favorite: { $in: userId },
     });
   }
