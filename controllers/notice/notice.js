@@ -1,6 +1,7 @@
 const { Notice } = require("../../models/notice");
 const { HttpError } = require("../../helpers/HttpError");
 const gravatar = require("gravatar");
+const { User } = require("../../models/userSchema");
 
 const createNotice = async (req, res, next) => {
   let noticeAvatarURL = null;
@@ -27,26 +28,24 @@ const createNotice = async (req, res, next) => {
 };
 
 const addNoticeFavorite = async (req, res, next) => {
-  const { _id: userId } = req.user;
-
+  const { _id, favorite } = req.user;
   const { id } = req.params;
 
-  const { favorite } = await Notice.findOne({ _id: id });
-
-  if (favorite.includes(userId)) {
-    throw HttpError(500, "Notice already added to favorites");
+  if (favorite.includes(id)) {
+    throw HttpError(
+      409,
+      `Notice with id: ${id} is already in your favorite list`
+    );
   }
 
-  const notice = await Notice.findOneAndUpdate(
-    { _id: id },
-    { $addToSet: { favorite: userId } }
+  const user = await User.findByIdAndUpdate(
+    _id,
+    { $push: { favorite: id } },
+    {
+      new: true,
+    }
   );
-
-  res.status(200).json({
-    userId: userId,
-    noticeId: notice._id,
-    message: "Successfully",
-  });
+  res.status(201).json({ favorite: user.favorite });
 };
 
 const deleteNoticeFavorite = async (req, res, next) => {
@@ -82,17 +81,20 @@ const deleteUserNotice = async (req, res, next) => {
 };
 
 const getNoticeByCategory = async (req, res) => {
-  const { category } = req.params;
-  const { title } = req.query;
+  const { categoryName: category, id } = req.params;
+  const { query } = req.query;
 
-  if (title && category) {
-    const notices = await Notice.find({ title, category });
+  if (!query && !category) {
+    const allNotices = await Notice.find({});
+    res.status(200).json(allNotices);
+  } else if (category && !query && !id) {
+    const noticesByCategory = await Notice.find({ category });
+    res.status(200).json(noticesByCategory);
+  } else if (category && query && !id) {
+    const notices = await Notice.find({ query, category });
     res.status(200).json(notices);
-  } else if (title) {
-    const notices = await Notice.find({ title });
-    res.status(200).json(notices);
-  } else if (category) {
-    const notices = await Notice.find({ category });
+  } else if (category && query && id) {
+    const notices = await Notice.find({ query, category, _id: id });
     res.status(200).json(notices);
   } else if (id) {
     const notice = await Notice.findById(id);
