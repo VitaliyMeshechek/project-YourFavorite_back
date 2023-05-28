@@ -81,31 +81,29 @@ const deleteUserNotice = async (req, res, next) => {
   res.status(200).json({ message: "Notice successfully deleted" });
 };
 
-const getNoticeById = async (req, res) => {
-  const { id } = req.params;
-
-  const notice = await Notice.findById({ _id: id });
-
-  if (!notice) {
-    throw HttpError(404, "Not found");
-  }
-
-  res.status(200).json(notice);
-};
-
 const getNoticeByCategory = async (req, res) => {
-  const { categoryName: category } = req.params;
+  const { categoryName: category, id } = req.params;
   const { query } = req.query;
 
-  if (query && category) {
+  if (!query && !category) {
+    const allNotices = await Notice.find({});
+    res.status(200).json(allNotices);
+  } else if (category && !query && !id) {
+    const noticesByCategory = await Notice.find({ category });
+    res.status(200).json(noticesByCategory);
+  } else if (category && query && !id) {
     const notices = await Notice.find({ query, category });
     res.status(200).json(notices);
-  } else if (query) {
-    const notices = await Notice.find({ query });
+  } else if (category && query && id) {
+    const notices = await Notice.find({ query, category, _id: id });
     res.status(200).json(notices);
-  } else if (category) {
-    const notices = await Notice.find({ category });
-    res.status(200).json(notices);
+  } else if (id) {
+    const notice = await Notice.findById(id);
+    if (notice) {
+      res.status(200).json([notice]);
+    } else {
+      res.status(404).json({ error: "Notice not found" });
+    }
   } else {
     res.status(400).json({ error: "No search parameters provided" });
   }
@@ -138,27 +136,18 @@ const getUserByNotices = async (req, res) => {
 
   res.status(200).json({ notices });
 };
-
-const findUserByTitle = async (req, res) => {
-  const { title } = req.params;
-  const { _id: userId } = req.user;
-
-  const notices = await Notice.find({
-    owner: userId,
-    title: { $regex: new RegExp(title, "i") },
-  });
-
-  res.status(200).json({ notices });
+const getAllNotices = async (req, res) => {
+  const notices = await Notice.find();
+  res.status(200).json(notices);
 };
 
 module.exports = {
   getUserByNotices,
-  getNoticeById,
   getNoticeByCategory,
   createNotice,
   addNoticeFavorite,
   getUserByFavorite,
-  findUserByTitle,
   deleteNoticeFavorite,
   deleteUserNotice,
+  getAllNotices,
 };
