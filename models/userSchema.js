@@ -50,6 +50,7 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "user",
     },
+    favorite: [{ type: Schema.Types.ObjectId, ref: "notice" }],
     firstLogin: {
       type: Boolean,
       default: true,

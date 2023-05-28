@@ -13,21 +13,21 @@ async function listSponsors() {
   return JSON.parse(data);
 }
 
-const addSponsors = async (req, res) => {
-  const { title, url, addressUrl, imageUrl, workDays, phone, email } = req.body;
+// const addSponsors = async (req, res) => {
+//   const { title, url, addressUrl, imageUrl, workDays, phone, email } = req.body;
 
-  if (!title) {
-    throw HttpError(400, "missing required title field");
-  }
+//   if (!title) {
+//     throw HttpError(400, "missing required title field");
+//   }
 
-  const checktitle = await Sponsor.findOne({ title: title });
-  if (checktitle) {
-    throw HttpError(400, "This title is already in use");
-  }
+//   const checktitle = await Sponsor.findOne({ title: title });
+//   if (checktitle) {
+//     throw HttpError(400, "This title is already in use");
+//   }
 
-  const result = await Sponsor.create({ ...req.body });
+//   const result = await Sponsor.create({ ...req.body });
 
-  res.status(201).json(result);
-};
+//   res.status(201).json(result);
+// };
 
 module.exports = addSponsors;
