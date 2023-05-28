@@ -2,7 +2,7 @@ const { uploadCloudinary } = require("../../helpers/uploadCloudinary");
 const { Pet } = require("../../models/petSchema");
 // const gravatar = require("gravatar");
 
-const { HttpError, ctrlWrapper } = require("../../helpers");
+const { HttpError } = require("../../helpers");
 
 const addPet = async (req, res) => {
   const { name } = req.body;
@@ -19,7 +19,7 @@ const addPet = async (req, res) => {
 
     res.status(201).json(result);
   } else {
-    const avatarUrl = await uploadCloudinary(req.file.avatar);
+    const avatarUrl = await uploadCloudinary(req.file.path);
     const petAvatar = await Pet.create({
       ...req.body,
       avatarUrl: avatarUrl.secure_url,
