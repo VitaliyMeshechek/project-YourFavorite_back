@@ -29,6 +29,7 @@ const userSchema = new Schema(
     name: {
       type: String,
       match: nameFormat,
+      default: null,
     },
     birthday: {
       type: String,
@@ -54,7 +55,7 @@ const userSchema = new Schema(
     firstLogin: {
       type: Boolean,
       default: true,
-    },   
+    },
     verify: {
       type: Boolean,
       default: false,

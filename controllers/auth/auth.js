@@ -13,7 +13,7 @@ const { SECRET_KEY, BASE_URL } = process.env;
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
-  const { name, email, password, city, phone, birthday } = req.body;
+  const { name, email, password } = req.body;
 
   const user = await User.findOne({ email });
   if (user) {
@@ -34,7 +34,7 @@ const register = async (req, res) => {
   });
 
   res.status(201).json({
-    user: {
+    newUser: {
       name: newUser.name,
       email: newUser.email,
     },
@@ -42,7 +42,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { name, email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
@@ -61,8 +61,11 @@ const login = async (req, res) => {
   await User.findByIdAndUpdate(user._id, { token });
 
   res.status(200).json({
+    user: {
+      email: user.email,
+      name: user.name,
+    },
     token,
-    message: "Your request has been successfully completed",
   });
 };
 
