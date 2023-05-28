@@ -19,21 +19,23 @@ const petSchema = new Schema(
       type: String,
       match: dateFormat,
       required: true,
+      default: null,
     },
     breed: {
       type: String,
       match: nameFormat,
       required: true,
+      default: null,
     },
     avatarUrl: {
       type: String,
-      default: "",
-      // required: true,
+      default: null,
+      required: true,
     },
     comments: {
       type: String,
       match: textFormat,
-      default: "",
+      default: null,
       required: true,
     },
     owner: {

@@ -30,7 +30,6 @@ const register = async (req, res) => {
   const newUser = await User.create({
     ...req.body,
     password: createHashPassword,
-    avatarUrl,
   });
 
   res.status(201).json({
@@ -42,7 +41,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, avatarUrl } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
@@ -64,6 +63,10 @@ const login = async (req, res) => {
     user: {
       email: user.email,
       name: user.name,
+      avatarUrl: user.avatarUrl,
+      birthday: user.birthday,
+      city: user.city,
+      phone: user.phone,
     },
     token,
   });
@@ -76,8 +79,23 @@ const logout = async (req, res) => {
   res.status(204, "logout success").json(result);
 };
 
+// const getCurrentUser = async (req, res) => {
+//   const { name, email, phone, city, birthday, avatarURL, _id } = req.user;
+
+//   res.status(200).json({
+//     avatarURL,
+//     name,
+//     email,
+//     birthday,
+//     phone,
+//     city,
+//     _id,
+//   });
+// };
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
+  // getCurrentUser: ctrlWrapper(getCurrentUser),
 };

@@ -34,18 +34,22 @@ const userSchema = new Schema(
     birthday: {
       type: String,
       match: dateFormat,
+      default: null,
     },
     city: {
       type: String,
       match: cityFormat,
+      default: null,
     },
     token: String,
     avatarUrl: {
       type: String,
+      default: null,
     },
     phone: {
       type: String,
       match: phoneFormat,
+      default: null,
     },
     owner: {
       type: Schema.Types.ObjectId,
@@ -78,10 +82,6 @@ const registerSchema = Joi.object({
       tlds: { allow: ["com", "net", "ukr", "ua"] },
     }),
   password: Joi.string().pattern(passwordFormat).min(6).max(16).required(),
-  // name: Joi.string().min(1).max(20).pattern(nameFormat),
-  // mobilePhone: Joi.string().pattern(phoneFormat),
-  // city: Joi.string().pattern(cityFormat),
-  // birthday: Joi.string().pattern(dateFormat),
 });
 
 const emailSchema = Joi.object({

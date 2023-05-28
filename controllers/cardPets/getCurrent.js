@@ -4,7 +4,7 @@ const getCurrent = async (req, res) => {
   const {
     name,
     email,
-    mobilePhone,
+    phone,
     city,
     birthday,
     avatarUrl,
@@ -22,7 +22,7 @@ const getCurrent = async (req, res) => {
         name,
         email,
         city,
-        mobilePhone,
+        phone,
         birthday,
       },
     },
