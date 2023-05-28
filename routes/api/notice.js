@@ -11,20 +11,17 @@ const {
 const { noticesSchema } = require("../../models/notice");
 const {
   getUserByNotices,
-  getNoticeById,
   getNoticeByCategory,
   createNotice,
   addNoticeFavorite,
   getUserByFavorite,
-  findUserByTitle,
   deleteNoticeFavorite,
   deleteUserNotice,
+  getAllNotices,
 } = require("../../controllers/notice/notice");
-
-router.get("/", authenticate, ctrlWrapper(getUserByNotices));
-// router.get("/:id", isValidId, ctrlWrapper(getNoticeById));
-router.get("/:categoryName", ctrlWrapper(getNoticeByCategory));
-// router.get("/title/:title", authenticate, ctrlWrapper(findUserByTitle));
+router.get("/", ctrlWrapper(getAllNotices));
+router.get("/own", authenticate, ctrlWrapper(getUserByNotices));
+router.get("/:categoryName/:id?", ctrlWrapper(getNoticeByCategory));
 router.get("/favorite", authenticate, ctrlWrapper(getUserByFavorite));
 
 router.post(
