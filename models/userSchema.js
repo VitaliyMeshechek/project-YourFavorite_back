@@ -45,7 +45,7 @@ const userSchema = new Schema(
     avatarUrl: {
       type: String,
     },
-    mobilePhone: {
+    phone: {
       type: String,
       match: phoneFormat,
       default: "+380000000000",
@@ -113,7 +113,7 @@ const updateUserSchema = Joi.object({
   birthday: Joi.string().pattern(dateFormat).optional(),
   phone: Joi.string().pattern(phoneFormat).optional(),
   city: Joi.string().pattern(cityFormat).optional(),
-  avatarURL: Joi.string().optional(),
+  avatarUrl: Joi.string().optional(),
 });
 
 const schemas = {

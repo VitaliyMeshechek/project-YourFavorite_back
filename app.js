@@ -8,6 +8,7 @@ const petsRouter = require("./routes/api/cardPets");
 const swaggerUi = require("swagger-ui-express");
 const swaggerjsdoc = require("./swagger.json");
 const newsRouter = require("./routes/api/news");
+const sponsorsRouter = require("./routes/api/sponsors");
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use("/api/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerjsdoc));
 app.use("/api/notices", noticeRouter);
 app.use("/api/cardPets", petsRouter);
 app.use("/api/news", newsRouter);
+app.use("/api/sponsors", sponsorsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
