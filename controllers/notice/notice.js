@@ -2,6 +2,7 @@ const { Notice } = require("../../models/notice");
 const { HttpError } = require("../../helpers/HttpError");
 const gravatar = require("gravatar");
 const { User } = require("../../models/userSchema");
+const { not } = require("joi");
 
 const createNotice = async (req, res, next) => {
   let noticeAvatarURL = null;
@@ -28,25 +29,26 @@ const createNotice = async (req, res, next) => {
 };
 
 const addNoticeFavorite = async (req, res, next) => {
-  const { _id, favorite } = req.user;
+  const { _id: userId } = req.user;
+
   const { id } = req.params;
+
   const { body } = req;
 
-  if (favorite.includes(id)) {
-    throw HttpError(
-      409,
-      `Notice with id: ${id} is already in your favorite list`
-    );
+  const { favorite } = await Notice.findOne({ _id: id });
+
+  if (favorite.includes(userId)) {
+    throw HttpError(500, "Notice already added to favorites");
   }
 
-  const updatedUser = await User.findByIdAndUpdate(
-    _id,
-    { $push: { favorite: { id, body } } },
-    { new: true }
+  const notice = await Notice.findOneAndUpdate(
+    { _id: id },
+    { $push: { favorite: { userId, body } } }
   );
 
-  res.status(201).json({
-    favorite: updatedUser.favorite,
+  res.status(200).json({
+    favorite: notice.favorite,
+    message: "Success",
   });
 };
 
@@ -147,18 +149,19 @@ const getNoticeByCategory = async (req, res) => {
 
 const getUserByFavorite = async (req, res) => {
   const { _id: userId } = req.user;
+
   const { title } = req.query;
 
   let notices;
 
   if (title) {
     notices = await User.find({
-      favorite: { $in: userId },
+      favorite: { owner: userId },
       title: title,
     });
   } else {
     notices = await User.find({
-      favorite: { $in: userId },
+      favorite: { owner: userId },
     });
   }
 
