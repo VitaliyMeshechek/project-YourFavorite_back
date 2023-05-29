@@ -24,6 +24,7 @@ const getCurrent = async (req, res) => {
         city,
         phone,
         birthday,
+        category,
       },
     },
     message: "Your request has been successfully completed",

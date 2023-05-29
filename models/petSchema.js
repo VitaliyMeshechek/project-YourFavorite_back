@@ -38,7 +38,11 @@ const petSchema = new Schema(
       default: null,
       required: true,
     },
-    favorite: [{ type: Schema.Types.ObjectId, ref: "notice" }],
+    category: {
+      type: String,
+      enum: ["your pet", "sell", "lost/found", "in good hands"],
+      default: null,
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
