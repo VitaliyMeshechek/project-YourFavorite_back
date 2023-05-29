@@ -80,23 +80,24 @@ const logout = async (req, res) => {
   res.status(204, "logout success").json(result);
 };
 
-// const getCurrentUser = async (req, res) => {
-//   const { name, email, phone, city, birthday, avatarURL, _id } = req.user;
+const getCurrentUser = async (req, res) => {
+  const { name, email, phone, city, birthday, avatarUrl } = req.user;
 
-//   res.status(200).json({
-//     avatarURL,
-//     name,
-//     email,
-//     birthday,
-//     phone,
-//     city,
-//     _id,
-//   });
-// };
+  res.status(200).json({
+    user: {
+      email,
+      name,
+      avatarUrl,
+      birthday,
+      city,
+      phone,
+    },
+  });
+};
 
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  getCurrentUser: ctrlWrapper(getCurrentUser),
   logout: ctrlWrapper(logout),
-  // getCurrentUser: ctrlWrapper(getCurrentUser),
 };
