@@ -168,7 +168,7 @@ const getUserByNotices = async (req, res) => {
     }
   );
 
-  res.status(200).json({ notices });
+  res.status(200).json(notices);
 };
 const getAllNotices = async (req, res) => {
   const { _id: owner } = req.user;
