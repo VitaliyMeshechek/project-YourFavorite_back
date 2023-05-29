@@ -75,19 +75,30 @@ const addNoticeFavorite = async (req, res) => {
 };
 
 const deleteNoticeFavorite = async (req, res, next) => {
-  const { _id: userId } = req.user;
+  const { _id, favorite } = req.user;
   const { id } = req.params;
 
-  const notice = await Notice.findOneAndUpdate(
-    { _id: id, favorite: userId },
-    { $pull: { favorite: userId } }
-  );
-
-  if (!notice) {
-    throw HttpError(500, "The notice is not in the favorites");
+  if (!favorite.includes(id)) {
+    res.status(409).json({
+      message: `The notice is not in the favorites`,
+    });
   }
 
-  res.status(200).json({ message: "Successfully removed from favorites" });
+  const notice = await User.findOneAndUpdate(
+    _id,
+    {
+      $pull: { favorite: id },
+    },
+    {
+      new: true,
+    }
+  );
+
+  res.status(200).json({
+    favorite: notice.favorite,
+    id,
+    message: "Successfully removed from favorites",
+  });
 };
 
 const deleteUserNotice = async (req, res, next) => {
