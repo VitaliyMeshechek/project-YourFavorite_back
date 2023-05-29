@@ -38,6 +38,7 @@ const petSchema = new Schema(
       default: null,
       required: true,
     },
+    favorite: [{ type: Schema.Types.ObjectId, ref: "notice" }],
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",

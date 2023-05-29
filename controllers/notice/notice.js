@@ -18,34 +18,60 @@ const createNotice = async (req, res, next) => {
 
   const { _id: owner } = req.user;
 
-  const notice = await Notice.create({
-    ...req.body,
-    avatarURL: noticeAvatarURL,
-    owner,
-  });
+  const notice = await Notice.create([
+    {
+      ...req.body,
+      avatarURL: noticeAvatarURL,
+      owner,
+    },
+  ]);
 
   res.status(200).json({ notice, message: "Successfully" });
 };
 
-const addNoticeFavorite = async (req, res, next) => {
+const addNoticeFavorite = async (req, res) => {
   const { _id, favorite } = req.user;
   const { id } = req.params;
-
   if (favorite.includes(id)) {
-    throw HttpError(
-      409,
-      `Notice with id: ${id} is already in your favorite list`
-    );
+    res.status(409).json({
+      message: `Notice with id: ${id} is already in your favorite list`,
+    });
   }
-
   const user = await User.findByIdAndUpdate(
     _id,
-    { $push: { favorite: id } },
+    {
+      $push: { favorite: id },
+    },
     {
       new: true,
     }
   );
   res.status(201).json({ favorite: user.favorite });
+
+  // const { _id: userId } = req.user;
+
+  // const { id } = req.params;
+
+  // const { body } = req;
+
+  // const result = await User.findOne({ _id: id });
+  // res.status(409).json({
+  //   message: `Notice with id: ${id} is already in your favorite list`,
+  // });
+
+  // // if (favorite.includes(userId)) {
+  // //   throw HttpError(500, "Notice already added to favorites");
+  // // }
+
+  // const notice = await User.findOneAndUpdate(
+  //   { _id: id },
+  //   { $push: { favorite: { userId, body } } }
+  // );
+
+  // res.status(200).json({
+  //   favorite: notice.favorite,
+  //   message: "Success",
+  // });
 };
 
 const deleteNoticeFavorite = async (req, res, next) => {
@@ -109,16 +135,23 @@ const getNoticeByCategory = async (req, res) => {
 };
 
 const getUserByFavorite = async (req, res) => {
+  // const { _id: userId } = req.user;
+
+  // const notices = await User.find({
+  //   favorite: { $in: userId },
+  // });
+
+  // res.status(200).json({ notices });
+
   const { _id: userId } = req.user;
-  const { query = "" } = req.query;
+  const { page = 1, limit = 8, query = "" } = req.query;
+  const skip = (page - 1) * limit;
 
   if (query === "") {
-    const notices = await Notice.findOne({ userId }, "favorite").populate({
+    const notices = await User.findOne({ userId }, "favorite").populate({
       path: "favorite",
       select:
         "category title name birthday breed sex location price imageURL comments owner updatedAt",
-      // perDocumentLimit: limit,
-      // skip,
       options: { limit, skip },
     });
     res.status(200).json(notices.favorite.reverse());
@@ -128,8 +161,6 @@ const getUserByFavorite = async (req, res) => {
       match: { $text: { $search: query } },
       select:
         "category title name birthday breed sex location price imageURL comments owner updatedAt",
-      // perDocumentLimit: limit,
-      // skip,
       options: { limit, skip },
     });
 

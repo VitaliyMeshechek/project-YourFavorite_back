@@ -67,6 +67,7 @@ const login = async (req, res) => {
       birthday: user.birthday,
       city: user.city,
       phone: user.phone,
+      firstLogin: user.firstLogin,
     },
     token,
   });
