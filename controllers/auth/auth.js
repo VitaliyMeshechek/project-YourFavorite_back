@@ -15,8 +15,8 @@ const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 const register = async (req, res) => {
   const { name, email, password } = req.body;
 
-  const user = await User.findOne({ email });
-  if (user) {
+  const userFindEmail = await User.findOne({ email });
+  if (userFindEmail) {
     throw HttpError(409, "This email is already in use");
   }
 
@@ -27,15 +27,15 @@ const register = async (req, res) => {
   const createHashPassword = await bcrypt.hash(password, 10);
   const avatarUrl = gravatar.url(email);
 
-  const newUser = await User.create({
+  const user = await User.create({
     ...req.body,
     password: createHashPassword,
   });
 
   res.status(201).json({
-    newUser: {
-      name: newUser.name,
-      email: newUser.email,
+    user: {
+      name: user.name,
+      email: user.email,
     },
   });
 };

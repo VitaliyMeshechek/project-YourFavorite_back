@@ -28,26 +28,24 @@ const createNotice = async (req, res, next) => {
 };
 
 const addNoticeFavorite = async (req, res, next) => {
-  const { _id: userId } = req.user;
-
+  const { _id, favorite } = req.user;
   const { id } = req.params;
 
-  const { favorite } = await Notice.findOne({ _id: id });
-
-  if (favorite.includes(userId)) {
-    throw HttpError(500, "Notice already added to favorites");
+  if (favorite.includes(id)) {
+    throw HttpError(
+      409,
+      `Notice with id: ${id} is already in your favorite list`
+    );
   }
 
-  const notice = await Notice.findOneAndUpdate(
-    { _id: id },
-    { $addToSet: { favorite: userId } }
+  const user = await User.findByIdAndUpdate(
+    _id,
+    { $push: { favorite: id } },
+    {
+      new: true,
+    }
   );
-
-  res.status(200).json({
-    userId: userId,
-    noticeId: notice._id,
-    message: "Successfully",
-  });
+  res.status(201).json({ favorite: user.favorite });
 };
 
 const deleteNoticeFavorite = async (req, res, next) => {
@@ -111,23 +109,32 @@ const getNoticeByCategory = async (req, res) => {
 };
 
 const getUserByFavorite = async (req, res) => {
-  const { _id: userId } = req.user;
-  const { title } = req.query;
+  const { _id } = req.user;
+  const { query } = req.query;
 
-  let notices;
-
-  if (title) {
-    notices = await Notice.find({
-      favorite: { $in: userId },
-      title: title,
+  if (!query) {
+    const notices = await Notice.findOne({ _id }, "favorite").populate({
+      path: "favorite",
+      select:
+        "category title name birthday breed sex location price imageURL comments owner updatedAt",
+      // perDocumentLimit: limit,
+      // skip,
+      options: { limit, skip },
     });
+    res.status(200).json(result.favorite.reverse());
   } else {
-    notices = await Notice.find({
-      favorite: { $in: userId },
+    const result = await User.findOne({ _id }, "favorite").populate({
+      path: "favorite",
+      match: { $text: { $search: title } },
+      select:
+        "category title name birthday breed sex location price imageURL comments owner updatedAt",
+      // perDocumentLimit: limit,
+      // skip,
+      options: { limit, skip },
     });
-  }
 
-  res.status(200).json({ notices });
+    res.status(200).json(result.favorite.reverse());
+  }
 };
 
 const getUserByNotices = async (req, res) => {
@@ -138,7 +145,13 @@ const getUserByNotices = async (req, res) => {
   res.status(200).json({ notices });
 };
 const getAllNotices = async (req, res) => {
-  const notices = await Notice.find();
+  const { _id: owner } = req.user;
+  const { page, limit } = req.query;
+  const skip = (page - 1) * limit;
+  const notices = await Notice.findOne({ owner }, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  });
   res.status(200).json(notices);
 };
 
