@@ -109,11 +109,11 @@ const getNoticeByCategory = async (req, res) => {
 };
 
 const getUserByFavorite = async (req, res) => {
-  const { _id } = req.user;
-  const { query } = req.query;
+  const { _id: userId } = req.user;
+  const { query = "" } = req.query;
 
-  if (!query) {
-    const notices = await Notice.findOne({ _id }, "favorite").populate({
+  if (query === "") {
+    const notices = await Notice.findOne({ userId }, "favorite").populate({
       path: "favorite",
       select:
         "category title name birthday breed sex location price imageURL comments owner updatedAt",
@@ -121,11 +121,11 @@ const getUserByFavorite = async (req, res) => {
       // skip,
       options: { limit, skip },
     });
-    res.status(200).json(result.favorite.reverse());
+    res.status(200).json(notices.favorite.reverse());
   } else {
-    const result = await User.findOne({ _id }, "favorite").populate({
+    const result = await User.findOne({ userId }, "favorite").populate({
       path: "favorite",
-      match: { $text: { $search: title } },
+      match: { $text: { $search: query } },
       select:
         "category title name birthday breed sex location price imageURL comments owner updatedAt",
       // perDocumentLimit: limit,
@@ -139,8 +139,17 @@ const getUserByFavorite = async (req, res) => {
 
 const getUserByNotices = async (req, res) => {
   const { _id: userId } = req.user;
+  const { page, limit } = req.query;
+  const skip = (page - 1) * limit;
 
-  const notices = await Notice.find({ owner: userId });
+  const notices = await Notice.find(
+    { owner: userId },
+    "-createdAt -updatedAt",
+    {
+      skip,
+      limit,
+    }
+  );
 
   res.status(200).json({ notices });
 };

@@ -41,7 +41,6 @@ const noticeSchema = new Schema(
     avatarURL: {
       type: String,
     },
-    favorite: [],
 
     owner: {
       type: Schema.Types.ObjectId,
