@@ -21,8 +21,8 @@ const {
 } = require("../../controllers/notice/notice");
 router.get("/", ctrlWrapper(getAllNotices));
 router.get("/own", authenticate, ctrlWrapper(getUserByNotices));
-router.get("/:categoryName/:id?", ctrlWrapper(getNoticeByCategory));
 router.get("/favorite", authenticate, ctrlWrapper(getUserByFavorite));
+router.get("/:categoryName/:id", ctrlWrapper(getNoticeByCategory));
 
 router.post(
   "/",

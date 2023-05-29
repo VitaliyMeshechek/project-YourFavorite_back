@@ -146,37 +146,12 @@ const getNoticeByCategory = async (req, res) => {
 };
 
 const getUserByFavorite = async (req, res) => {
-  // const { _id: userId } = req.user;
-
-  // const notices = await User.find({
-  //   favorite: { $in: userId },
-  // });
-
-  // res.status(200).json({ notices });
-
   const { _id: userId } = req.user;
-  const { page = 1, limit = 8, query = "" } = req.query;
-  const skip = (page - 1) * limit;
+  const notices = await User.findById(userId)
+    .populate("favorite")
+    .select("favorite");
 
-  if (query === "") {
-    const notices = await User.findOne({ userId }, "favorite").populate({
-      path: "favorite",
-      select:
-        "category title name birthday breed sex location price imageURL comments owner updatedAt",
-      options: { limit, skip },
-    });
-    res.status(200).json(notices.favorite.reverse());
-  } else {
-    const result = await User.findOne({ userId }, "favorite").populate({
-      path: "favorite",
-      match: { $text: { $search: query } },
-      select:
-        "category title name birthday breed sex location price imageURL comments owner updatedAt",
-      options: { limit, skip },
-    });
-
-    res.status(200).json(result.favorite.reverse());
-  }
+  res.status(200).json(...notices.favorite);
 };
 
 const getUserByNotices = async (req, res) => {
@@ -199,7 +174,7 @@ const getAllNotices = async (req, res) => {
   const { _id: owner } = req.user;
   const { page, limit } = req.query;
   const skip = (page - 1) * limit;
-  const notices = await Notice.findOne({ owner }, "-createdAt -updatedAt", {
+  const notices = await Notice.find({}, "-createdAt -updatedAt", {
     skip,
     limit,
   });

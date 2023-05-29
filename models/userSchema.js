@@ -51,10 +51,6 @@ const userSchema = new Schema(
       match: phoneFormat,
       default: null,
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-    },
     favorite: [{ type: Schema.Types.ObjectId, ref: "notice" }],
     firstLogin: {
       type: Boolean,

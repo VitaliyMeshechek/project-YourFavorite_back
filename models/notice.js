@@ -41,7 +41,6 @@ const noticeSchema = new Schema(
     avatarURL: {
       type: String,
     },
-
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
