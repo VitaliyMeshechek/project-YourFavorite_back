@@ -41,13 +41,12 @@ const addNoticeFavorite = async (req, res, next) => {
 
   const updatedUser = await User.findByIdAndUpdate(
     _id,
-    { $push: { favorite: id }, body },
+    { $push: { favorite: { id, body } } },
     { new: true }
   );
 
   res.status(201).json({
     favorite: updatedUser.favorite,
-    body,
   });
 };
 
