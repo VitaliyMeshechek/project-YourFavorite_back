@@ -19,10 +19,10 @@ const {
   deleteUserNotice,
   getAllNotices,
 } = require("../../controllers/notice/notice");
-router.get("/users", ctrlWrapper(getAllNotices));
+router.get("/", ctrlWrapper(getAllNotices));
 router.get("/own", authenticate, ctrlWrapper(getUserByNotices));
 router.get("/:categoryName/:id?", ctrlWrapper(getNoticeByCategory));
-router.get("/users/favorite", authenticate, ctrlWrapper(getUserByFavorite));
+router.get("/favorite", authenticate, ctrlWrapper(getUserByFavorite));
 
 router.post(
   "/",
