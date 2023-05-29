@@ -30,72 +30,55 @@ const createNotice = async (req, res, next) => {
 };
 
 const addNoticeFavorite = async (req, res) => {
-  const { _id, favorite } = req.user;
+  const { _id: userId } = req.user;
   const { id } = req.params;
-  if (favorite.includes(id)) {
-    res.status(409).json({
-      message: `Notice with id: ${id} is already in your favorite list`,
-    });
+
+  const notice = await Notice.findOne({ _id: id });
+
+  if (!notice) {
+    return res.status(404).json({ message: "Notice not found" });
   }
-  const user = await User.findByIdAndUpdate(
-    _id,
-    {
-      $push: { favorite: id },
-    },
-    {
-      new: true,
-    }
-  );
-  res.status(201).json({ favorite: user.favorite });
 
-  // const { _id: userId } = req.user;
+  const favorite = notice.favorite || [];
 
-  // const { id } = req.params;
+  if (favorite.includes(userId)) {
+    throw new Error("Notice already added to favorites");
+  }
 
-  // const { body } = req;
+  await User.findByIdAndUpdate(userId, {
+    $push: { favorite: { ...notice._doc, id } },
+  });
 
-  // const result = await User.findOne({ _id: id });
-  // res.status(409).json({
-  //   message: `Notice with id: ${id} is already in your favorite list`,
-  // });
-
-  // // if (favorite.includes(userId)) {
-  // //   throw HttpError(500, "Notice already added to favorites");
-  // // }
-
-  // const notice = await User.findOneAndUpdate(
-  //   { _id: id },
-  //   { $push: { favorite: { userId, body } } }
-  // );
-
-  // res.status(200).json({
-  //   favorite: notice.favorite,
-  //   message: "Success",
-  // });
+  res.status(200).json({
+    favorite: favorite.concat({ userId, ...notice._doc }),
+    message: "Success",
+  });
 };
 
 const deleteNoticeFavorite = async (req, res, next) => {
-  const { _id, favorite } = req.user;
+  const { _id: userId, favorite } = req.user;
   const { id } = req.params;
 
-  if (!favorite.includes(id)) {
-    res.status(409).json({
-      message: `The notice is not in the favorites`,
+  const existingNotice = favorite.find((item) => item.id === id);
+
+  if (!existingNotice) {
+    return res.status(409).json({
+      message: "The notice is not in the favorites",
     });
   }
 
-  const notice = await User.findOneAndUpdate(
-    _id,
-    {
-      $pull: { favorite: id },
-    },
-    {
-      new: true,
-    }
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { $pull: { favorite: { id } } },
+    { new: true }
   );
 
+  if (!updatedUser) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
   res.status(200).json({
-    favorite: notice.favorite,
+    favorite: updatedUser.favorite,
     id,
     message: "Successfully removed from favorites",
   });
@@ -119,9 +102,9 @@ const deleteUserNotice = async (req, res, next) => {
 
 const getNoticeByCategory = async (req, res) => {
   const { categoryName: category, id } = req.params;
-  const { query, page, limit } = req.query;
+  const { query: title, page, limit } = req.query;
   const skip = (page - 1) * limit;
-  if (!query && !category) {
+  if (!title && !category) {
     const allNotices = await Notice.find(
       {},
       "-createdAt -updatedAt -idCloudAvatar",
@@ -131,7 +114,7 @@ const getNoticeByCategory = async (req, res) => {
       }
     );
     res.status(200).json(allNotices);
-  } else if (category && !query && !id) {
+  } else if (category && !title && !id) {
     const noticesByCategory = await Notice.find(
       { category },
       "-createdAt -updatedAt -idCloudAvatar",
@@ -141,9 +124,9 @@ const getNoticeByCategory = async (req, res) => {
       }
     );
     res.status(200).json(noticesByCategory);
-  } else if (category && query && !id) {
+  } else if (category && title && !id) {
     const notices = await Notice.find(
-      { query, category },
+      { title, category },
       "-createdAt -updatedAt -idCloudAvatar",
       {
         skip,
@@ -151,9 +134,9 @@ const getNoticeByCategory = async (req, res) => {
       }
     );
     res.status(200).json(notices);
-  } else if (category && query && id) {
+  } else if (category && title && id) {
     const notices = await Notice.find(
-      { query, category, _id: id },
+      { title, category, _id: id },
       "-createdAt -updatedAt -idCloudAvatar",
       {
         skip,
@@ -186,7 +169,7 @@ const getUserByFavorite = async (req, res) => {
     .populate("favorite")
     .select("favorite");
 
-  res.status(200).json(...notices.favorite);
+  res.status(200).json(notices.favorite);
 };
 
 const getUserByNotices = async (req, res) => {
