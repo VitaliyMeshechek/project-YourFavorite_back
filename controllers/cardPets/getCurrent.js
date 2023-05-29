@@ -8,6 +8,7 @@ const getCurrent = async (req, res) => {
     city,
     birthday,
     avatarUrl,
+    category,
     _id: owner,
   } = req.user;
 
