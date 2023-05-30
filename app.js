@@ -31,7 +31,6 @@ app.use("/api/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerjsdoc));
 app.use("/api/notices", noticeRouter);
 app.use("/api/cardPets", petsRouter);
 app.use("/api/news", newsRouter);
-// app.use("/api/sponsors", sponsorsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

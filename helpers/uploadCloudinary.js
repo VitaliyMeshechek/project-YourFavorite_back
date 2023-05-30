@@ -1,11 +1,12 @@
 const cloudinary = require("cloudinary").v2;
-const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
+const { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } = process.env;
+const Jimp = require("jimp");
 const fs = require("fs");
 
 cloudinary.config({
-  cloud_name: CLOUD_NAME,
-  api_key: API_KEY,
-  api_secret: API_SECRET,
+  cloud_name: CLOUDINARY_NAME,
+  api_key: CLOUDINARY_KEY,
+  api_secret: CLOUDINARY_SECRET,
   secure: true,
 });
 
