@@ -13,17 +13,17 @@ const petSchema = new Schema(
     name: {
       type: String,
       match: nameFormat,
-      required: true,
+      // required: true,
     },
     birthday: {
       type: String,
       match: dateFormat,
-      required: true,
+      // required: true,
     },
     breed: {
       type: String,
       match: nameFormat,
-      required: true,
+      // required: true,
     },
     avatarUrl: {
       type: String,
@@ -33,7 +33,7 @@ const petSchema = new Schema(
     comments: {
       type: String,
       match: textFormat,
-      required: true,
+      // required: true,
     },
     category: {
       type: String,
