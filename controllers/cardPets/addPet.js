@@ -1,4 +1,4 @@
-const { uploadCloudinary } = require("../../helpers/uploadCloudinary");
+const uploadCloudinary = require("../../helpers/uploadCloudinary");
 const { Pet } = require("../../models/petSchema");
 // const gravatar = require("gravatar");
 

@@ -19,8 +19,8 @@ router.post(
   "/pet",
   authenticate,
   validateBody(petSchemas.petAddSchema),
-  // upload.single("avatar"),
-  uploadCloud.single("avatar"),
+  upload.single("avatar"),
+  // uploadCloud.single("avatar"),
   ctrlWrapper(ctrl.addPet)
 );
 
@@ -31,8 +31,8 @@ router.get("/", authenticate, ctrlWrapper(ctrl.getCurrent));
 router.patch(
   "/",
   authenticate,
-  // upload.single("avatar"),
-  uploadCloud.single("avatar"),
+  upload.single("avatar"),
+  // uploadCloud.single("avatar"),
   validateBody(schemas.updateUserSchema),
   ctrlWrapper(ctrl.updateFieldUser)
 );
