@@ -19,13 +19,11 @@ const petSchema = new Schema(
       type: String,
       match: dateFormat,
       required: true,
-      default: null,
     },
     breed: {
       type: String,
       match: nameFormat,
       required: true,
-      default: null,
     },
     avatarUrl: {
       type: String,
@@ -35,13 +33,12 @@ const petSchema = new Schema(
     comments: {
       type: String,
       match: textFormat,
-      default: null,
       required: true,
     },
     category: {
       type: String,
       enum: ["your pet", "sell", "lost/found", "in good hands"],
-      default: null,
+      required: true,
     },
     firstLogin: {
       type: Boolean,
@@ -58,12 +55,12 @@ const petSchema = new Schema(
 petSchema.post("save", handleMongooseError);
 
 const petAddSchema = Joi.object({
-  name: Joi.string().pattern(nameFormat),
+  name: Joi.string().min(2).pattern(nameFormat),
   birthday: Joi.string().pattern(dateFormat),
-  breed: Joi.string().pattern(nameFormat),
+  breed: Joi.string().min(2).max(16).pattern(nameFormat),
   comments: Joi.string().min(10).max(120).pattern(textFormat),
   avatarURL: Joi.string().optional(),
-  category: Joi.string().optional(),
+  category: Joi.string().trim(true).min(8).max(120).required(),
   firstLogin: Joi.boolean(),
 });
 
