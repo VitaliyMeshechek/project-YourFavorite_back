@@ -27,7 +27,6 @@ const petSchema = new Schema(
     },
     avatarUrl: {
       type: String,
-      default: null,
       required: false,
     },
     comments: {
