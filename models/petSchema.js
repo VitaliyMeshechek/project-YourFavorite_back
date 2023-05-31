@@ -63,7 +63,7 @@ const petAddSchema = Joi.object({
   breed: Joi.string().pattern(nameFormat),
   comments: Joi.string().min(10).max(120).pattern(textFormat),
   avatarURL: Joi.string().optional(),
-  category: Joi.string(),
+  category: Joi.string().optional(),
   firstLogin: Joi.boolean(),
 });
 
