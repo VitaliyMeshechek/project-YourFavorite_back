@@ -5,7 +5,7 @@ const { Pet } = require("../../models/petSchema");
 const { HttpError } = require("../../helpers");
 
 const addPet = async (req, res) => {
-  const { name, birthday, breed, comments, category, avatarUrl } = req.body;
+  const { name, birthday, breed, comments, category, image } = req.body;
   if (!req.file) {
     if (!name) {
       throw HttpError(400, "missing required name field");
@@ -19,10 +19,10 @@ const addPet = async (req, res) => {
 
     res.status(201).json(result);
   } else {
-    const avatarUrl = await uploadCloudinary(req.file.path);
+    const image = await uploadCloudinary(req.file.path);
     const petAvatar = await Pet.create({
       ...req.body,
-      avatarUrl: avatarUrl.secure_url,
+      image: image.secure_url,
       owner: ownerId,
     });
     res.status(201).json(petAvatar);

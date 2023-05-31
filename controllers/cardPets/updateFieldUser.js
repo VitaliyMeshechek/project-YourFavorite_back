@@ -5,7 +5,7 @@ const { User } = require("../../models/userSchema");
 const { HttpError } = require("../../helpers");
 
 const updateFieldUser = async (req, res) => {
-  const { name, email, phone, city, birthday, firstLogin } = req.body;
+  const { name, email, phone, city, birthday, firstLogin, image } = req.body;
   const { _id } = req.user;
   //   const { id } = req.params;
   if (!req.file) {
@@ -18,7 +18,7 @@ const updateFieldUser = async (req, res) => {
     );
     res.status(200).json({
       user: {
-        avatarUrl: user.avatarUrl,
+        image: user.image,
         userCurrent: {
           name: user.name,
           email: user.email,
@@ -30,17 +30,17 @@ const updateFieldUser = async (req, res) => {
       },
     });
   } else {
-    const avatarUrl = await uploadCloudinary(req.file.path);
+    const image = await uploadCloudinary(req.file.path);
     const user = await User.findOneAndUpdate(
       _id,
-      { ...req.body, avatarUrl: avatarUrl.secure_url },
+      { ...req.body, image: image.secure_url },
       {
         new: true,
       }
     );
     res.status(200).json({
       user: {
-        avatarUrl: user.avatarUrl,
+        image: user.image,
         userCurrent: {
           name: user.name,
           email: user.email,

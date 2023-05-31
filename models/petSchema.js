@@ -25,7 +25,7 @@ const petSchema = new Schema(
       match: nameFormat,
       required: false,
     },
-    avatarUrl: {
+    image: {
       type: String,
       required: true,
     },

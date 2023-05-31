@@ -42,7 +42,7 @@ const userSchema = new Schema(
       default: null,
     },
     token: String,
-    avatarUrl: {
+    image: {
       type: String,
       default: null,
     },
@@ -109,7 +109,6 @@ const updateUserSchema = Joi.object({
   birthday: Joi.string().pattern(dateFormat).optional(),
   phone: Joi.string().pattern(phoneFormat).optional(),
   city: Joi.string().pattern(cityFormat).optional(),
-  avatarUrl: Joi.string().optional(),
   firstLogin: Joi.boolean(),
 });
 

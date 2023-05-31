@@ -19,7 +19,7 @@ router.post(
   "/pet",
   authenticate,
   validateBody(petSchemas.petAddSchema),
-  upload.single("avatarUrl"),
+  upload.single("avatar"),
   // uploadCloud.single("avatar"),
   ctrlWrapper(ctrl.addPet)
 );
