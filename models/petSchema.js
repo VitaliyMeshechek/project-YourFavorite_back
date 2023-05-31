@@ -26,7 +26,7 @@ const petSchema = new Schema(
       required: false,
     },
     avatarUrl: {
-      type: String,
+      type: file,
       required: false,
     },
     comments: {
