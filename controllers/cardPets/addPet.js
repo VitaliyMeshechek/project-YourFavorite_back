@@ -5,7 +5,7 @@ const { Pet } = require("../../models/petSchema");
 const { HttpError } = require("../../helpers");
 
 const addPet = async (req, res) => {
-  const { name, birthday, breed, comments, category } = req.body;
+  const { name, birthday, breed, comments, category, avatarUrl } = req.body;
   if (!req.file) {
     if (!name) {
       throw HttpError(400, "missing required name field");

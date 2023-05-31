@@ -3,7 +3,7 @@ const router = express.Router();
 
 const ctrl = require("../../controllers/cardPets");
 
-const { ctrlWrapper } = require("../../helpers");
+const { ctrlWrapper, uploadCloud } = require("../../helpers");
 
 const { petSchemas } = require("../../models/petSchema");
 const { schemas } = require("../../models/userSchema");
@@ -19,7 +19,8 @@ router.post(
   "/pet",
   authenticate,
   validateBody(petSchemas.petAddSchema),
-  upload.single("avatar"),
+  // upload.single("avatar"),
+  uploadCloud.single("avatar"),
   ctrlWrapper(ctrl.addPet)
 );
 
@@ -30,7 +31,8 @@ router.get("/", authenticate, ctrlWrapper(ctrl.getCurrent));
 router.patch(
   "/",
   authenticate,
-  upload.single("avatar"),
+  // upload.single("avatar"),
+  uploadCloud.single("avatar"),
   validateBody(schemas.updateUserSchema),
   ctrlWrapper(ctrl.updateFieldUser)
 );

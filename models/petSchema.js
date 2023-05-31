@@ -30,7 +30,7 @@ const petSchema = new Schema(
     avatarUrl: {
       type: String,
       default: null,
-      // required: true,
+      required: true,
     },
     comments: {
       type: String,
@@ -54,10 +54,10 @@ const petSchema = new Schema(
 petSchema.post("save", handleMongooseError);
 
 const petAddSchema = Joi.object({
-  name: Joi.string().pattern(nameFormat).required(),
-  birthday: Joi.string().pattern(dateFormat).required(),
-  breed: Joi.string().pattern(nameFormat).required(),
-  comments: Joi.string().min(10).max(120).pattern(textFormat).required(),
+  name: Joi.string().pattern(nameFormat),
+  birthday: Joi.string().pattern(dateFormat),
+  breed: Joi.string().pattern(nameFormat),
+  comments: Joi.string().min(10).max(120).pattern(textFormat),
   avatarURL: Joi.string().optional(),
   category: Joi.string(),
 });

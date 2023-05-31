@@ -24,6 +24,10 @@ const register = async (req, res) => {
     res.status(400).json({ message: "missing required field email" });
   }
 
+  if (!req.body) {
+    res.status(401).json({ message: "You need to register" });
+  }
+
   const createHashPassword = await bcrypt.hash(password, 10);
   const avatarUrl = gravatar.url(email);
 
@@ -32,11 +36,18 @@ const register = async (req, res) => {
     password: createHashPassword,
   });
 
+  const payload = {
+    id: user._id,
+  };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "12h" });
+  await User.findByIdAndUpdate(user._id, { token });
+
   res.status(201).json({
     user: {
       name: user.name,
       email: user.email,
     },
+    token,
   });
 };
 
@@ -55,7 +66,7 @@ const login = async (req, res) => {
   const payload = {
     id: user._id,
   };
-  require("dotenv").config();
+
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "12h" });
   await User.findByIdAndUpdate(user._id, { token });
 
@@ -82,18 +93,24 @@ const logout = async (req, res) => {
 
 const getCurrentUser = async (req, res) => {
   const { name, email, phone, city, birthday, avatarUrl } = req.user;
-
-  res.status(200).json({
-    user: {
-      email,
-      name,
-      avatarUrl,
-      birthday,
-      city,
-      phone,
-    },
-  });
+  if (req.user) {
+    res.status(200).json({
+      user: {
+        email,
+        name,
+        avatarUrl,
+        birthday,
+        city,
+        phone,
+      },
+    });
+  }
 };
+
+// const getCurrentUser = async (req, res) => {
+//   const user = await User.find();
+//   res.status(200).json(user);
+// };
 
 module.exports = {
   register: ctrlWrapper(register),
