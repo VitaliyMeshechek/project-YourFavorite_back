@@ -78,6 +78,7 @@ const registerSchema = Joi.object({
       tlds: { allow: ["com", "net", "ukr", "ua"] },
     }),
   password: Joi.string().pattern(passwordFormat).min(6).max(16).required(),
+  name: Joi.string().min(1).pattern(nameFormat),
 });
 
 const emailSchema = Joi.object({
@@ -99,6 +100,7 @@ const loginSchema = Joi.object({
     "match the input format. Example of input: ivanov@gmail.com"
   ),
   password: Joi.string().min(6).max(16).pattern(passwordFormat).required(),
+  name: Joi.string().min(1).pattern(nameFormat),
 });
 
 const updateUserSchema = Joi.object({

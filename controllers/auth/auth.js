@@ -108,10 +108,11 @@ const getCurrentUser = async (req, res) => {
 };
 
 const getFindUsers = async (req, res) => {
+  const { name, email } = req.user;
   const { id } = req.params;
   const users = await User.findById(id);
 
-  res.status(200).json(users);
+  res.status(200).json({ users: { name, email } });
 };
 
 // const getCurrentUser = async (req, res) => {
