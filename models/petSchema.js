@@ -43,6 +43,10 @@ const petSchema = new Schema(
       enum: ["your pet", "sell", "lost/found", "in good hands"],
       default: null,
     },
+    firstLogin: {
+      type: Boolean,
+      default: true,
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
@@ -60,6 +64,7 @@ const petAddSchema = Joi.object({
   comments: Joi.string().min(10).max(120).pattern(textFormat),
   avatarURL: Joi.string().optional(),
   category: Joi.string(),
+  firstLogin: Joi.boolean(),
 });
 
 const petSchemas = {

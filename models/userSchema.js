@@ -52,10 +52,6 @@ const userSchema = new Schema(
       default: null,
     },
     favorite: [],
-    firstLogin: {
-      type: Boolean,
-      default: true,
-    },
     verify: {
       type: Boolean,
       default: false,

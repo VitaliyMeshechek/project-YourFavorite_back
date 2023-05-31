@@ -5,7 +5,7 @@ const { User } = require("../../models/userSchema");
 const { HttpError } = require("../../helpers");
 
 const updateFieldUser = async (req, res) => {
-  const { name, email, phone, city, birthday } = req.body;
+  const { name, email, phone, city, birthday, firstLogin } = req.body;
   const { _id } = req.user;
   //   const { id } = req.params;
   if (!req.file) {
@@ -25,6 +25,7 @@ const updateFieldUser = async (req, res) => {
           city: user.city,
           phone: user.phone,
           birthday: user.birthday,
+          firstLogin: user.firstLogin,
         },
       },
     });
