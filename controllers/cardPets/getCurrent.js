@@ -7,7 +7,7 @@ const getCurrent = async (req, res) => {
     phone,
     city,
     birthday,
-    image,
+    avatarUrl,
     category,
     _id: owner,
   } = req.user;
@@ -17,7 +17,7 @@ const getCurrent = async (req, res) => {
   res.status(201).json({
     user: {
       _id: owner,
-      image,
+      avatarUrl,
       pets: [...pets],
       userCurrent: {
         name,
