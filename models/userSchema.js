@@ -51,6 +51,10 @@ const userSchema = new Schema(
       match: phoneFormat,
       default: null,
     },
+    firstLogin: {
+      type: Boolean,
+      default: true,
+    },
     favorite: [],
     verify: {
       type: Boolean,
@@ -104,6 +108,7 @@ const updateUserSchema = Joi.object({
   phone: Joi.string().pattern(phoneFormat).optional(),
   city: Joi.string().pattern(cityFormat).optional(),
   avatarUrl: Joi.string().optional(),
+  firstLogin: Joi.boolean(),
 });
 
 const schemas = {

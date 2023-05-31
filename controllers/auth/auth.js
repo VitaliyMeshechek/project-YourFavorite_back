@@ -52,7 +52,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { name, email, password, avatarUrl } = req.body;
+  const { name, email, password, avatarUrl, firstLogin } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
@@ -107,6 +107,13 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
+const getFindUsers = async (req, res) => {
+  const { id } = req.params;
+  const users = await User.findById(id);
+
+  res.status(200).json(users);
+};
+
 // const getCurrentUser = async (req, res) => {
 //   const user = await User.find();
 //   res.status(200).json(user);
@@ -116,5 +123,6 @@ module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrentUser: ctrlWrapper(getCurrentUser),
+  getFindUsers: ctrlWrapper(getFindUsers),
   logout: ctrlWrapper(logout),
 };

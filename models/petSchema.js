@@ -30,7 +30,7 @@ const petSchema = new Schema(
     avatarUrl: {
       type: String,
       default: null,
-      required: true,
+      // required: true,
     },
     comments: {
       type: String,

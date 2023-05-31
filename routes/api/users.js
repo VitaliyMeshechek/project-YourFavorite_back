@@ -13,6 +13,8 @@ router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
 router.get("/current", authenticate, ctrl.getCurrentUser);
 
+router.get("/", authenticate, ctrl.getFindUsers);
+
 router.post("/logout", authenticate, ctrl.logout);
 
 module.exports = router;
