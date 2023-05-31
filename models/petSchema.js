@@ -38,7 +38,6 @@ const petSchema = new Schema(
     category: {
       type: String,
       enum: ["your pet", "sell", "lost/found", "in good hands"],
-      required: true,
     },
     firstLogin: {
       type: Boolean,
@@ -60,7 +59,7 @@ const petAddSchema = Joi.object({
   breed: Joi.string().min(2).max(16).pattern(nameFormat),
   comments: Joi.string().min(10).max(120).pattern(textFormat),
   avatarURL: Joi.string().optional(),
-  category: Joi.string().trim(true).min(8).max(120).required(),
+  category: Joi.string().trim(true).min(8).max(120).optional(),
   firstLogin: Joi.boolean(),
 });
 
