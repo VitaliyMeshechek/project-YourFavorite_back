@@ -6,6 +6,7 @@ const { HttpError, ctrlWrapper } = require("../../helpers");
 const path = require("path");
 
 const { User } = require("../../models/userSchema");
+const { Pet } = require("../../models/petSchema");
 
 require("dotenv").config();
 const { SECRET_KEY, BASE_URL } = process.env;
@@ -110,9 +111,18 @@ const getCurrentUser = async (req, res) => {
 const getFindUsers = async (req, res) => {
   const { name, email, phone } = req.user;
   const { id } = req.params;
-  const users = await User.findById(id);
+  if (!id) {
+    res.status(404).json({ message: "No data found" });
+  }
+  const findUser = await Pet.findById(id);
 
-  res.status(200).json({ users: { name, email, phone } });
+  res.status(200).json({
+    findUser: {
+      name: findUser.name,
+      email: findUser.email,
+      phone: findUser.phone,
+    },
+  });
 };
 
 // const getCurrentUser = async (req, res) => {

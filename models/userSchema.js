@@ -29,7 +29,7 @@ const userSchema = new Schema(
     name: {
       type: String,
       match: nameFormat,
-      default: null,
+      required: true,
     },
     birthday: {
       type: String,
@@ -49,7 +49,7 @@ const userSchema = new Schema(
     phone: {
       type: String,
       match: phoneFormat,
-      default: "",
+      required: true,
     },
     firstLogin: {
       type: Boolean,
@@ -100,7 +100,8 @@ const loginSchema = Joi.object({
     "match the input format. Example of input: ivanov@gmail.com"
   ),
   password: Joi.string().min(6).max(16).pattern(passwordFormat).required(),
-  name: Joi.string().min(1).pattern(nameFormat),
+  name: Joi.string().min(1).pattern(nameFormat).required(),
+  phone: Joi.string().pattern(phoneFormat).required(),
 });
 
 const updateUserSchema = Joi.object({
