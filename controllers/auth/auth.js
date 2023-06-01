@@ -110,19 +110,20 @@ const getCurrentUser = async (req, res) => {
 };
 
 const getFindUsers = async (req, res) => {
-  const { email, phone } = req.user;
+  const { email, phone } = req.body;
   const { id } = req.params;
   if (!id) {
     res.status(404).json({ message: "No data found" });
   }
   const findUser = await Pet.findById(id);
-
-  res.status(200).json({
-    findUser: {
-      email,
-      phone,
-    },
-  });
+  if (req.user) {
+    res.status(200).json({
+      findUser: {
+        email: findUser.email,
+        phone: findUser.phone,
+      },
+    });
+  }
 };
 
 // const getCurrentUser = async (req, res) => {
