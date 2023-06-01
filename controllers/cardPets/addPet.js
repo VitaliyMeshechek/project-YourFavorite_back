@@ -1,16 +1,14 @@
-const { uploadCloudinary } = require("../../helpers");
 const { Pet } = require("../../models/petSchema");
-// const gravatar = require("gravatar");
 
 const { HttpError } = require("../../helpers");
 
 const addPet = async (req, res) => {
   const { name, birthday, breed, comments, category, avatarUrl } = req.body;
+  const { _id: ownerId } = req.user;
   if (!req.file) {
     if (!name) {
       throw HttpError(400, "missing required name field");
     }
-    const { _id: ownerId } = req.user;
     const checkName = await Pet.findOne({ name: name });
     if (checkName) {
       throw HttpError(400, "This name is already in use");
@@ -19,12 +17,10 @@ const addPet = async (req, res) => {
 
     res.status(201).json(result);
   } else {
-    console.log("req.file.path", req.file.path);
-    const avatarUrl = await uploadCloudinary(req.file.path);
-    console.log("avatarUrl", avatarUrl);
+
     const petAvatar = await Pet.create({
       ...req.body,
-      avatarUrl: avatarUrl.secure_url,
+      avatarUrl: req.file.path,
       owner: ownerId,
     });
     res.status(201).json(petAvatar);
