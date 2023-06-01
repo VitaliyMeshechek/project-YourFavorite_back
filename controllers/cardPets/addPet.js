@@ -23,7 +23,7 @@ const addPet = async (req, res) => {
       owner: ownerId,
     });
 
-    res.status(201).json(petAvatar);
+    res.status(201).json({ petAvatar });
   }
 };
 
