@@ -6,13 +6,10 @@ const addPet = async (req, res) => {
   const { name, birthday, breed, comments, category, avatarUrl } = req.body;
   const { _id: ownerId } = req.user;
   if (!req.file) {
-    if (!name) {
-      throw HttpError(400, "missing required name field");
+    if (!req.body) {
+      throw HttpError(400, "Not all fields are filled");
     }
-    const checkName = await Pet.findOne({ name: name });
-    if (checkName) {
-      throw HttpError(400, "This name is already in use");
-    }
+
     const result = await Pet.create({ ...req.body, owner: ownerId });
 
     res.status(201).json(result);
@@ -22,6 +19,10 @@ const addPet = async (req, res) => {
       avatarUrl: req.file.path,
       owner: ownerId,
     });
+    const checkName = await Pet.findOne({ name: name });
+    if (checkName) {
+      throw HttpError(400, "This name is already in use");
+    }
 
     res.status(201).json({ petAvatar });
   }

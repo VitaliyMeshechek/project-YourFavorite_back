@@ -20,7 +20,6 @@ router.post(
   authenticate,
   validateBody(petSchemas.petAddSchema),
   upload.single("avatar"),
-  // uploadCloud.single("avatar"),
   ctrlWrapper(ctrl.addPet)
 );
 
@@ -32,7 +31,6 @@ router.patch(
   "/",
   authenticate,
   upload.single("avatar"),
-  // uploadCloud.single("avatar"),
   validateBody(schemas.updateUserSchema),
   ctrlWrapper(ctrl.updateFieldUser)
 );
