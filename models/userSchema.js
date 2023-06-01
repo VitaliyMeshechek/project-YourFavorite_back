@@ -49,7 +49,6 @@ const userSchema = new Schema(
     phone: {
       type: String,
       match: phoneFormat,
-      default: null,
     },
     firstLogin: {
       type: Boolean,

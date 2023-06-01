@@ -41,6 +41,10 @@ const noticeSchema = new Schema(
     avatarURL: {
       type: String,
     },
+    category: {
+      type: String,
+      enum: ["your pet", "sell", "lost/found", "in good hands"],
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",

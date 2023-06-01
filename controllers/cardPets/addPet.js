@@ -17,12 +17,12 @@ const addPet = async (req, res) => {
 
     res.status(201).json(result);
   } else {
-
     const petAvatar = await Pet.create({
       ...req.body,
       avatarUrl: req.file.path,
       owner: ownerId,
     });
+
     res.status(201).json(petAvatar);
   }
 };
