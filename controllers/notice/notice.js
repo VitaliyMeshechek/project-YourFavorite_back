@@ -1,21 +1,21 @@
 const { Notice } = require("../../models/notice");
-// const { uploadCloudinary } = require("../../helpers/uploadCloudinary");
+
 const { HttpError } = require("../../helpers/HttpError");
 const gravatar = require("gravatar");
 const { User } = require("../../models/userSchema");
 
 const createNotice = async (req, res, next) => {
-  let noticeAvatarURL = null;
+  // let noticeAvatarURL = null;
 
-  if (req.file) {
-    const { email } = req.user;
-    const avatarURL = gravatar.url(email, {
-      s: "200",
-      r: "pg",
-      d: "mm",
-    });
-    noticeAvatarURL = avatarURL;
-  }
+  // if (req.file) {
+  //   const { email } = req.user;
+  //   const avatarURL = gravatar.url(email, {
+  //     s: "200",
+  //     r: "pg",
+  //     d: "mm",
+  //   });
+  //   noticeAvatarURL = avatarURL;
+  // }
 
   const { _id: owner } = req.user;
   const { categoryName } = req.params; // Get the category from req.query instead of req.body
@@ -27,7 +27,7 @@ const createNotice = async (req, res, next) => {
   const notice = await Notice.create([
     {
       ...req.body,
-      avatarURL: noticeAvatarURL,
+      avatarUrl: req.file.path,
       owner,
       category: categoryName, // Include the category in the notice object
     },

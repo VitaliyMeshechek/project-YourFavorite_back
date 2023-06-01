@@ -14,7 +14,7 @@ const { SECRET_KEY, BASE_URL } = process.env;
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, firstLogin } = req.body;
 
   const userFindEmail = await User.findOne({ email });
   if (userFindEmail) {
@@ -47,6 +47,7 @@ const register = async (req, res) => {
     user: {
       name: user.name,
       email: user.email,
+      firstLogin: user.firstLogin,
     },
     token,
   });
@@ -118,7 +119,6 @@ const getFindUsers = async (req, res) => {
 
   res.status(200).json({
     findUser: {
-      name: findUser.name,
       email: findUser.email,
       phone: findUser.phone,
     },
