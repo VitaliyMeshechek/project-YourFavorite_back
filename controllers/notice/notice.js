@@ -126,8 +126,9 @@ const getNoticeByCategory = async (req, res) => {
     );
     res.status(200).json(noticesByCategory);
   } else if (category && title && !id) {
+    const regex = new RegExp(title, 'i')
     const notices = await Notice.find(
-      { title, category },
+      {  category, title: {$regex: regex} },
       "-createdAt -updatedAt -idCloudAvatar",
       {
         skip,
@@ -136,8 +137,9 @@ const getNoticeByCategory = async (req, res) => {
     );
     res.status(200).json(notices);
   } else if (category && title && id) {
+    const regex = new RegExp(title, 'i')
     const notices = await Notice.find(
-      { title, category, _id: id },
+      { category, title: {$regex: regex},  _id: id },
       "-createdAt -updatedAt -idCloudAvatar",
       {
         skip,
