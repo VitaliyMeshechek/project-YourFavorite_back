@@ -29,7 +29,7 @@ const userSchema = new Schema(
     name: {
       type: String,
       match: nameFormat,
-      required: true,
+      default: null,
     },
     birthday: {
       type: String,
@@ -49,7 +49,7 @@ const userSchema = new Schema(
     phone: {
       type: String,
       match: phoneFormat,
-      required: true,
+      default: null,
     },
     firstLogin: {
       type: Boolean,
