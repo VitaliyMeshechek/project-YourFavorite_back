@@ -64,7 +64,7 @@ const noticesSchema = Joi.object({
     .trim()
     .min(2)
     .required(),
-  category: Joi.string().required(),
+  category: Joi.string(),
   birthday: Joi.string()
     .regex(/^([0-2][1-9]|[1-3]0|31)\.(0[1-9]|1[0-2])\.\d{4}$/)
     .required(),
