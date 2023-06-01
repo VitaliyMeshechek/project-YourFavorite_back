@@ -1,4 +1,4 @@
-const { uploadCloudinary } = require("../../helpers/uploadCloudinary");
+const { uploadCloudinary } = require("../../helpers");
 const { Pet } = require("../../models/petSchema");
 // const gravatar = require("gravatar");
 
@@ -19,7 +19,9 @@ const addPet = async (req, res) => {
 
     res.status(201).json(result);
   } else {
+    console.log("req.file.path", req.file.path);
     const avatarUrl = await uploadCloudinary(req.file.path);
+    console.log("avatarUrl", avatarUrl);
     const petAvatar = await Pet.create({
       ...req.body,
       avatarUrl: avatarUrl.secure_url,

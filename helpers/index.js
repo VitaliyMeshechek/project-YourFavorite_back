@@ -1,11 +1,11 @@
 const HttpError = require("./HttpError");
 const ctrlWrapper = require("./ctrlWrapper");
 const handleMongooseError = require("./handleMongooseError");
-const uploadCloud = require("./uploadCloudinary");
+const uploadCloudinary = require("./uploadCloudinary");
 
 module.exports = {
   HttpError,
   ctrlWrapper,
   handleMongooseError,
-  uploadCloud,
+  uploadCloudinary,
 };

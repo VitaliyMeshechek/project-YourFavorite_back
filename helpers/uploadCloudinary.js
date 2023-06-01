@@ -14,9 +14,11 @@ const uploadCloudinary = async (path) => {
   try {
     const resultUpload = await Jimp.read(path);
     resultUpload.cover(450, 450);
+    console.log("resultUpload", resultUpload);
     await resultUpload.writeAsync(path);
     const result = await cloudinary.uploader.upload(path);
     fs.unlinkSync(path);
+    console.log("result", result);
     return result;
   } catch (error) {
     throw new Error(error.message);
