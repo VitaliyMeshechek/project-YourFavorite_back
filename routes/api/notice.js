@@ -27,7 +27,7 @@ router.get("/:categoryName/:id?", ctrlWrapper(getNoticeByCategory));
 router.post(
   "/:categoryName",
   authenticate,
-  upload.single("image"),
+  upload.single("avatar"),
   validateBody(noticesSchema),
   ctrlWrapper(createNotice)
 );

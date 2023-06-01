@@ -110,7 +110,7 @@ const getCurrentUser = async (req, res) => {
 };
 
 const getFindUsers = async (req, res) => {
-  const { name, email, phone } = req.user;
+  const { email, phone } = req.user;
   const { id } = req.params;
   if (!id) {
     res.status(404).json({ message: "No data found" });
@@ -119,8 +119,8 @@ const getFindUsers = async (req, res) => {
 
   res.status(200).json({
     findUser: {
-      email: findUser.email,
-      phone: findUser.phone,
+      email,
+      phone,
     },
   });
 };
