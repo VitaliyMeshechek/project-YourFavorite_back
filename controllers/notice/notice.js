@@ -18,12 +18,18 @@ const createNotice = async (req, res, next) => {
   }
 
   const { _id: owner } = req.user;
+  const { categoryName } = req.params; // Get the category from req.query instead of req.body
+
+  if (!categoryName) {
+    return res.status(400).json({ error: "Category is required" });
+  }
 
   const notice = await Notice.create([
     {
       ...req.body,
       avatarURL: noticeAvatarURL,
       owner,
+      category: categoryName, // Include the category in the notice object
     },
   ]);
 

@@ -25,7 +25,7 @@ router.get("/favorite", authenticate, ctrlWrapper(getUserByFavorite));
 router.get("/:categoryName/:id?", ctrlWrapper(getNoticeByCategory));
 
 router.post(
-  "/",
+  "/:categoryName",
   authenticate,
   upload.single("image"),
   validateBody(noticesSchema),
