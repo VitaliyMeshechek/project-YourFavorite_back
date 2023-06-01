@@ -100,8 +100,8 @@ const loginSchema = Joi.object({
     "match the input format. Example of input: ivanov@gmail.com"
   ),
   password: Joi.string().min(6).max(16).pattern(passwordFormat).required(),
-  name: Joi.string().min(1).pattern(nameFormat).required(),
-  phone: Joi.string().pattern(phoneFormat).required(),
+  name: Joi.string().min(1).pattern(nameFormat),
+  phone: Joi.string().pattern(phoneFormat),
 });
 
 const updateUserSchema = Joi.object({

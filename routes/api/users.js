@@ -13,7 +13,7 @@ router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
 router.get("/current", authenticate, ctrl.getCurrentUser);
 
-router.get("/:id", authenticate, ctrl.getFindUsers);
+router.get("/:id", ctrl.getFindUsers);
 
 router.post("/logout", authenticate, ctrl.logout);
 
