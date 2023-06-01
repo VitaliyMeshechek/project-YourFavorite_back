@@ -38,7 +38,7 @@ const noticeSchema = new Schema(
     price: {
       type: Number,
     },
-    avatarURL: {
+    avatarUrl: {
       type: String,
     },
     category: {
@@ -83,7 +83,7 @@ const noticesSchema = Joi.object({
   sex: Joi.string().required(),
   comments: Joi.string().min(2).max(200).required(),
   price: Joi.string().regex(/^(?!0\d)\d+(?:\.\d{1,2})?$/),
-  avatarURL: Joi.string(),
+  avatarUrl: Joi.string(),
 });
 
 const Notice = model("notice", noticeSchema);

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const ctrl = require("../../controllers/cardPets");
 
-const { ctrlWrapper, uploadCloud } = require("../../helpers");
+const { ctrlWrapper } = require("../../helpers");
 
 const { petSchemas } = require("../../models/petSchema");
 const { schemas } = require("../../models/userSchema");
