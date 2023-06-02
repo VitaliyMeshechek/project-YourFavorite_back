@@ -19,37 +19,25 @@ const updateFieldUser = async (req, res) => {
     );
     res.status(200).json({
       user: {
-        avatarUrl: user.avatarUrl,
-        userCurrent: {
-          name: user.name,
-          email: user.email,
-          city: user.city,
-          phone: user.phone,
-          birthday: user.birthday,
-          firstLogin: user.firstLogin,
-        },
+        name: user.name,
+        email: user.email,
+        city: user.city,
+        phone: user.phone,
+        birthday: user.birthday,
+        firstLogin: user.firstLogin,
       },
     });
   } else {
-    const image = await uploadCloudinary(req.file.path);
-    const user = await User.findOneAndUpdate(
+    const userCurrent = await User.findOneAndUpdate(
       _id,
-      { ...req.body, image: image.secure_url },
+      { ...req.body, avatarUrl: req.file.path },
       {
         new: true,
       }
     );
+
     res.status(200).json({
-      user: {
-        image: user.image,
-        userCurrent: {
-          name: user.name,
-          email: user.email,
-          city: user.city,
-          phone: user.phone,
-          birthday: user.birthday,
-        },
-      },
+      userCurrent,
     });
   }
 };
