@@ -19,7 +19,7 @@ const updateFieldUser = async (req, res) => {
     );
     res.status(200).json({
       user: {
-        avatarURL: req.file.path,
+        avatarUrl: req.file.path,
         userCurrent: {
           name: user.name,
           email: user.email,
@@ -41,7 +41,7 @@ const updateFieldUser = async (req, res) => {
 
     res.status(200).json({
       user: {
-        avatarURL: req.file.path,
+        avatarUrl: req.file.path,
         userCurrent: {
           name: user.name,
           email: user.email,
