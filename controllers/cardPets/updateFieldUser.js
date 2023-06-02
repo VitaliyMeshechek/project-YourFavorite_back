@@ -19,16 +19,19 @@ const updateFieldUser = async (req, res) => {
     );
     res.status(200).json({
       user: {
-        name: user.name,
-        email: user.email,
-        city: user.city,
-        phone: user.phone,
-        birthday: user.birthday,
-        firstLogin: user.firstLogin,
+        avatarURL: req.file.path,
+        userCurrent: {
+          name: user.name,
+          email: user.email,
+          city: user.city,
+          phone: user.phone,
+          birthday: user.birthday,
+          firstLogin: user.firstLogin,
+        },
       },
     });
   } else {
-    const userCurrent = await User.findOneAndUpdate(
+    const user = await User.findOneAndUpdate(
       _id,
       { ...req.body, avatarUrl: req.file.path },
       {
@@ -37,7 +40,17 @@ const updateFieldUser = async (req, res) => {
     );
 
     res.status(200).json({
-      userCurrent,
+      user: {
+        avatarURL: req.file.path,
+        userCurrent: {
+          name: user.name,
+          email: user.email,
+          city: user.city,
+          phone: user.phone,
+          birthday: user.birthday,
+          firstLogin: user.firstLogin,
+        },
+      },
     });
   }
 };
