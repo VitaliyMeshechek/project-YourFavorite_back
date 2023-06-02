@@ -16,7 +16,7 @@ const createNotice = async (req, res, next) => {
   //   });
   //   noticeAvatarURL = avatarURL;
   // }
-
+  const { email } = req.user;
   const { _id: owner } = req.user;
   const { categoryName } = req.params; // Get the category from req.query instead of req.body
 
