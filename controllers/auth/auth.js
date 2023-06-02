@@ -93,43 +93,23 @@ const logout = async (req, res) => {
   res.status(204, "logout success").json(result);
 };
 
-const getCurrentUser = async (req, res) => {
-  const { name, email, phone, city, birthday, avatarUrl } = req.user;
-  if (req.user) {
-    res.status(200).json({
-      user: {
-        email,
-        name,
-        avatarUrl,
-        birthday,
-        city,
-        phone,
-      },
-    });
-  }
-};
-
 const getFindUsers = async (req, res) => {
-  const { email: email, phone: phone } = req.user;
   const { id } = req.params;
-  if (!id) {
-    res.status(404).json({ message: "No data found" });
-  }
-  const findUser = await Pet.findById(id);
-  if (req.user) {
-    res.status(200).json({
-      findUser: {
-        email: findUser.email,
-        phone: findUser.phone,
-      },
-    });
-  }
+  const user = await User.findById(id);
+
+  res.status(200).json({
+    users: {
+      email: user.email,
+      name: user.name,
+      phone: user.phone,
+    },
+  });
 };
 
-// const getCurrentUser = async (req, res) => {
-//   const user = await User.find();
-//   res.status(200).json(user);
-// };
+const getCurrentUser = async (req, res) => {
+  const user = await User.find();
+  res.status(200).json(user);
+};
 
 module.exports = {
   register: ctrlWrapper(register),
