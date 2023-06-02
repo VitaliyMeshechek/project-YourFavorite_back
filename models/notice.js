@@ -69,7 +69,7 @@ const noticesSchema = Joi.object({
     .regex(/^([0-2][1-9]|[1-3]0|31)\.(0[1-9]|1[0-2])\.\d{4}$/)
     .required(),
   location: Joi.string()
-    .regex(/^[A-Za-z\s]+,\s[A-Za-z\s]+$/)
+    .regex(/^([A-Za-z\-\']{1,20})|([А-Яа-я\-\']{1,20})$/)
     .required(),
   breed: Joi.string()
     .regex(/^[A-Za-z\s]+$/)
