@@ -107,8 +107,19 @@ const getFindUsers = async (req, res) => {
 };
 
 const getCurrentUser = async (req, res) => {
-  const user = await User.find();
-  res.status(200).json(user);
+  const { name, email, phone, city, birthday, avatarUrl, _id } = req.user;
+
+  res.status(200).json({
+    user: {
+      email,
+      name,
+      phone,
+      city,
+      birthday,
+      avatarUrl,
+      _id,
+    },
+  });
 };
 
 module.exports = {
