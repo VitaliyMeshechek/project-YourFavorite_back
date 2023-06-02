@@ -5,7 +5,8 @@ const { User } = require("../../models/userSchema");
 const { HttpError } = require("../../helpers");
 
 const updateFieldUser = async (req, res) => {
-  const { name, email, phone, city, birthday, firstLogin, image } = req.body;
+  const { name, email, phone, city, birthday, firstLogin, image, avatarUrl } =
+    req.body;
   const { _id } = req.user;
   //   const { id } = req.params;
   if (!req.file) {
@@ -18,7 +19,7 @@ const updateFieldUser = async (req, res) => {
     );
     res.status(200).json({
       user: {
-        image: user.image,
+        avatarUrl: user.avatarUrl,
         userCurrent: {
           name: user.name,
           email: user.email,
